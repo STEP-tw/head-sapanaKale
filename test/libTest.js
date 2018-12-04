@@ -14,6 +14,10 @@ describe('segregateInput', function() {
     actualInput = segregateInput(['-c','3','file1','file2']); 
     expectedOutput = {requirement:'c',number:'3',inputFiles:['file1','file2']};
     assert.deepEqual(actualInput,expectedOutput);
+
+    actualInput = segregateInput(['file1','file2']); 
+    expectedOutput = {requirement:'n',number:'10',inputFiles:['file1','file2']};
+    assert.deepEqual(actualInput,expectedOutput);
   });
 });
 

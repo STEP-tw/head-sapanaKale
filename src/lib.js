@@ -1,17 +1,23 @@
 const segregateInput = function (listOfInput) {
+  let result = { requirement: 'n', 
+                 number: '10', 
+                 inputFiles: listOfInput.slice(0) };
+  
   if( listOfInput[0].length == 2 && !isNaN( listOfInput[0]-1 ) ) {
-    return { requirement:'n', 
-             number:listOfInput[0][1], 
-             inputFiles:listOfInput.slice(1) };
+    result.number = listOfInput[0][1];
+    result.inputFiles = listOfInput.slice(1);
   }
   if( listOfInput[0].length == 3 ) {
-    return { requirement: listOfInput[0][1],
-             number: listOfInput[0][2],
-             inputFiles: listOfInput.slice(1) };
+    result.requirement = listOfInput[0][1];
+    result.number = listOfInput[0][2];
+    result.inputFiles = listOfInput.slice(1);
   }
-  return { requirement: listOfInput[0][1],
-           number: listOfInput[1],
-           inputFiles: listOfInput.slice(2) };
+  if( listOfInput[0].length == 2 && !isNaN( listOfInput[1]-1 )) {
+    result.requirement = listOfInput[0][1];
+    result.number = listOfInput[1];
+    result.inputFiles = listOfInput.slice(2);
+  }
+return result;
 }
 
 module.exports = {segregateInput};
