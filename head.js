@@ -14,5 +14,13 @@
   node ./head.js -c 5 file1 file2
 */
 
+const { segregateInput, head } = require('./src/lib.js');
+const fs = require('fs');
 
+const main = function () {
+  let parameters = segregateInput(process.argv.slice(2));
+  console.log(head(fs.readFileSync,parameters));
+}
+
+main();
 
