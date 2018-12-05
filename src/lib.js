@@ -56,10 +56,9 @@ const usageMessage = 'usage: head [-n lines | -c bytes] [file ...]';
 const head = function (reader,validater,{requirement,number,inputFiles}) {
   if (requirement != 'n' && requirement !='c') {
     return errorMessage + requirement + '\n' + usageMessage;
-    process.exit();
   }
   if (number < 1) {
-    return 'head: illegal line count -- 0';
+    return (requirement == 'n') ? 'head: illegal line count -- 0' :'head: illegal byte count -- 0';
   }
   return headFiles(reader,validater,{requirement,number,inputFiles});
 }
