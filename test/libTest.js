@@ -8,19 +8,19 @@ const { segregateInput,
 describe('segregateInput', function() {
   it('should return object parameter as key with values for provided input', function() {
     let actualInput = segregateInput(['-n5','file1']); 
-    let expectedOutput = {requirement:'n',number:'5',inputFiles:['file1']};
+    let expectedOutput = {type:'n',count:'5',inputFiles:['file1']};
     assert.deepEqual(actualInput,expectedOutput);
 
     actualInput = segregateInput(['-5','file1']); 
-    expectedOutput = {requirement:'n',number:'5',inputFiles:['file1']};
+    expectedOutput = {type:'n',count:'5',inputFiles:['file1']};
     assert.deepEqual(actualInput,expectedOutput);
 
     actualInput = segregateInput(['-c','3','file1','file2']); 
-    expectedOutput = {requirement:'c',number:'3',inputFiles:['file1','file2']};
+    expectedOutput = {type:'c',count:'3',inputFiles:['file1','file2']};
     assert.deepEqual(actualInput,expectedOutput);
 
     actualInput = segregateInput(['file1','file2']); 
-    expectedOutput = {requirement:'n',number:'10',inputFiles:['file1','file2']};
+    expectedOutput = {type:'n',count:'10',inputFiles:['file1','file2']};
     assert.deepEqual(actualInput,expectedOutput);
   });
 });
@@ -28,7 +28,7 @@ describe('segregateInput', function() {
 const reader = file => file;
 
 describe('headLines', function() {
-  it('should return lines from provided input file of given number', function() {
+  it('should return lines from provided input file of given count', function() {
     let file1 = 'one\ntwo\nthree\nfour';
     let expectedOutput = 'one\ntwo';
     assert.deepEqual(headLines(reader(file1),2),expectedOutput);
@@ -36,7 +36,7 @@ describe('headLines', function() {
 });
 
 describe('headCharacters', function() {
-  it('should return characters from provided input file of given number ', function() {
+  it('should return characters from provided input file of given count ', function() {
     let file = 'one\ntwo';
     let expectedOutput = 'one';
     assert.deepEqual(headCharacters(reader(file),3),expectedOutput);
@@ -53,20 +53,20 @@ const validater = function(file) {
 describe('headFiles', function() {
   it('should return the lines as per provided input', function() {
     let file = 'one\ntwo\nthree\nfour';
-    let parameters = {requirement:'n',number:'3',inputFiles:[file]}
+    let parameters = {type:'n',count:'3',inputFiles:[file]}
     assert.deepEqual(headFiles(reader,validater,parameters),'one\ntwo\nthree');
   });
 
   it('should return the characters as per provided input', function() {
     let file = 'one\ntwo\nthree\nfour';
-    let parameters = {requirement:'c',number:'2',inputFiles: [file]}
+    let parameters = {type:'c',count:'2',inputFiles: [file]}
     assert.deepEqual(headFiles(reader,validater,parameters),'on');
   });
 
   it('should return the lines when multiple files are provided', function() {
     let file = 'one\ntwo\nthree';
     let file1 = 'the\na\nan';
-    let parameters = {requirement:'n',number:'2',inputFiles:[file,file1]}
+    let parameters = {type:'n',count:'2',inputFiles:[file,file1]}
     let expectedOutput = '==> one\ntwo\nthree <==\none\ntwo\n\n==> the\na\nan <==\nthe\na'
     assert.deepEqual(headFiles(reader,validater,parameters),expectedOutput);
   });
@@ -74,7 +74,7 @@ describe('headFiles', function() {
   it('should return the characters when multiple files are provided', function() {
     let file = 'one\ntwo';
     let file1 = 'three\nfour';
-    let parameters = {requirement:'c',number:'2',inputFiles: [file,file1]}
+    let parameters = {type:'c',count:'2',inputFiles: [file,file1]}
     let expectedOutput = '==> one\ntwo <==\non\n\n==> three\nfour <==\nth'
     assert.deepEqual(headFiles(reader,validater,parameters),expectedOutput);
   });
@@ -82,7 +82,7 @@ describe('headFiles', function() {
   it("should return the lines for file which exists and error for file which doesn't exists", function() {
     let file = 'one\ntwo\nthree';
     let file1 = 'not exists';
-    let parameters = {requirement:'n',number:'2',inputFiles:[file,file1]}
+    let parameters = {type:'n',count:'2',inputFiles:[file,file1]}
     let expectedOutput = '==> one\ntwo\nthree <==\none\ntwo\n\nhead: not exists: No such file or directory'
     assert.deepEqual(headFiles(reader,validater,parameters),expectedOutput);
   });
@@ -92,7 +92,7 @@ describe('head', function() {
   it('should return error message when invalid inputs are provided ', function() {
     let file = 'one\ntwo';
     let file1 = 'three\nfour';
-    let parameters = {requirement:'e',number:'2',inputFiles: [file,file1]}
+    let parameters = {type:'e',count:'2',inputFiles: [file,file1]}
     let expectedOutput = 'head: illegal option -- e\nusage: head [-n lines | -c bytes] [file ...]';
     assert.deepEqual(head(reader,validater,parameters),expectedOutput);
   });
@@ -100,7 +100,7 @@ describe('head', function() {
   it('should return the lines when multiple files are provided', function() {
     let file = 'one\ntwo\nthree';
     let file1 = 'the\na\nan';
-    let parameters = {requirement:'n',number:'2',inputFiles:[file,file1]}
+    let parameters = {type:'n',count:'2',inputFiles:[file,file1]}
     let expectedOutput = '==> one\ntwo\nthree <==\none\ntwo\n\n==> the\na\nan <==\nthe\na'
     assert.deepEqual(head(reader,validater,parameters),expectedOutput);
   });
