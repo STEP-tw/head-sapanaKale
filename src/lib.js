@@ -20,4 +20,36 @@ const segregateInput = function (listOfInput) {
 return result;
 }
 
-module.exports = {segregateInput};
+const headLines = function (reader,numberOfLines,file) {
+  let content = reader(file);
+  let lines = content.toString().split('\n');
+  lines = lines.slice(0,numberOfLines).join('\n');
+  return lines;
+}
+
+const headCharacters = function (reader,numberOfChar,file) {
+  let content = reader(file);
+  let characters = content.slice(0,numberOfChar).toString();
+  return characters;
+}
+
+const head = function (reader, {requirement,number,inputFiles}) {
+  return inputFiles.map(function(file) {
+    let fileName = '==> '+ file + ' <==' + '\n';
+    let result;
+    if( requirement == 'n') {
+      result = headLines(reader,number,file);
+    } else {
+      result = headCharacters(reader,number,file);
+    }
+    if (inputFiles.length > 1) {
+      return fileName + result;
+    }
+    return result;
+  }).join("\n");
+}
+
+module.exports = { segregateInput,
+                   headLines,
+                   headCharacters,
+                   head };
