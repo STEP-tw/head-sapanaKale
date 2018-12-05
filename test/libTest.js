@@ -93,7 +93,7 @@ describe('head', function() {
     let file = 'one\ntwo';
     let file1 = 'three\nfour';
     let parameters = {requirement:'e',number:'2',inputFiles: [file,file1]}
-    let expectedOutput = 'head: illeagal option -- e\nusage: head [-n lines | -c bytes] [file ...]';
+    let expectedOutput = 'head: illegal option -- e\nusage: head [-n lines | -c bytes] [file ...]';
     assert.deepEqual(head(reader,validater,parameters),expectedOutput);
   });
 
