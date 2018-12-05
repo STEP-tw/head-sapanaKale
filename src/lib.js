@@ -33,14 +33,12 @@ const headCharacters = function (reader,numberOfChar,file) {
   return characters;
 }
 
-const head = function (reader, {requirement,number,inputFiles}) {
+const headFiles = function (reader, {requirement,number,inputFiles}) {
   return inputFiles.map(function(file) {
     let fileName = '==> '+ file + ' <==' + '\n';
-    let result;
+    let result = headCharacters(reader,number,file);
     if( requirement == 'n') {
       result = headLines(reader,number,file);
-    } else {
-      result = headCharacters(reader,number,file);
     }
     if (inputFiles.length > 1) {
       return fileName + result;
@@ -49,7 +47,20 @@ const head = function (reader, {requirement,number,inputFiles}) {
   }).join("\n");
 }
 
+const errorMessage = 'head: illeagal option -- ';
+
+const usageMessage = 'usage: head [-n lines | -c bytes] [file ...]';
+
+const head = function (reader,{requirement,number,inputFiles}) {
+  if (requirement != 'n' && requirement !='c') {
+    return errorMessage + requirement + '\n' + usageMessage;
+    process.exit();
+  }
+  return headFiles(reader,{requirement,number,inputFiles});
+}
+
 module.exports = { segregateInput,
                    headLines,
                    headCharacters,
+                   headFiles,
                    head };
