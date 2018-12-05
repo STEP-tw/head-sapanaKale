@@ -15,9 +15,9 @@ const segregateInput = function (listOfInput) {
     result.count = listOfInput[0][1];
     result.inputFiles = listOfInput.slice(1);
   }
-  if( listOfInput[0].length == 3 ) {
+  if( listOfInput[0].length >= 3 && listOfInput[0][0] == '-') {
     result.type = listOfInput[0][1];
-    result.count = listOfInput[0][2];
+    result.count = listOfInput[0].slice(2);
     result.inputFiles = listOfInput.slice(1);
   }
   if( listOfInput[0].length == 2 && isNaN( listOfInput[0]-1 )) {
@@ -61,7 +61,7 @@ const head = function (reader,validater,{type,count,inputFiles}) {
   if (type != 'n' && type !='c') {
     return errorMessage + type + '\n' + usageMessage;
   }
-  if (isNaN(count - 0)) {
+  if (isNaN(count - 0) || count == 0) {
     return (type == 'n') ? invalidLineCount + count : invalidByteCount + count;
   }
   return headFiles(reader,validater,{type,count,inputFiles});
