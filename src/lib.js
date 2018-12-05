@@ -11,16 +11,17 @@ const segregateInput = function (listOfInput) {
                  count: '10', 
                  inputFiles: listOfInput.slice(0) };
   
-  if( listOfInput[0].length >= 2 && !isNaN( listOfInput[0]-1 ) ) {
+  if( listOfInput[0].length >= 2 && !isNaN(listOfInput[0].slice(0,2)) ) {
     result.count = listOfInput[0].slice(1);
     result.inputFiles = listOfInput.slice(1);
   }
-  if( listOfInput[0].length >= 3 && (listOfInput[0][1]=='n'|| listOfInput[0][1]=='c')) {
+  let firstChar = listOfInput[0][0];
+  if( listOfInput[0].length >= 3 && firstChar=='-' && isNaN(listOfInput[0][1]) ) {
     result.type = listOfInput[0][1];
     result.count = listOfInput[0].slice(2);
     result.inputFiles = listOfInput.slice(1);
   }
-  if( listOfInput[0].length == 2 && isNaN( listOfInput[0]-1 )) {
+  if( listOfInput[0].length == 2 && isNaN(listOfInput[0][1] && listOfInput[0][0]=='-')) {
     result.type = listOfInput[0][1];
     result.count = listOfInput[1];
     result.inputFiles = listOfInput.slice(2);
