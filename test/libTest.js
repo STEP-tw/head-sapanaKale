@@ -60,7 +60,7 @@ describe('headFiles', function() {
     let file = 'one\ntwo\nthree';
     let file1 = 'the\na\nan';
     let parameters = {requirement:'n',number:'2',inputFiles:[file,file1]}
-    let expectedOutput = '==> one\ntwo\nthree <==\none\ntwo\n==> the\na\nan <==\nthe\na'
+    let expectedOutput = '==> one\ntwo\nthree <==\none\ntwo\n\n==> the\na\nan <==\nthe\na'
     assert.deepEqual(headFiles(reader,parameters),expectedOutput);
   });
 
@@ -68,7 +68,7 @@ describe('headFiles', function() {
     let file = 'one\ntwo';
     let file1 = 'three\nfour';
     let parameters = {requirement:'c',number:'2',inputFiles: [file,file1]}
-    let expectedOutput = '==> one\ntwo <==\non\n==> three\nfour <==\nth'
+    let expectedOutput = '==> one\ntwo <==\non\n\n==> three\nfour <==\nth'
     assert.deepEqual(headFiles(reader,parameters),expectedOutput);
   });
 });
@@ -86,7 +86,7 @@ describe('head', function() {
     let file = 'one\ntwo\nthree';
     let file1 = 'the\na\nan';
     let parameters = {requirement:'n',number:'2',inputFiles:[file,file1]}
-    let expectedOutput = '==> one\ntwo\nthree <==\none\ntwo\n==> the\na\nan <==\nthe\na'
+    let expectedOutput = '==> one\ntwo\nthree <==\none\ntwo\n\n==> the\na\nan <==\nthe\na'
     assert.deepEqual(head(reader,parameters),expectedOutput);
   });
 });

@@ -44,7 +44,7 @@ const headFiles = function (reader, {requirement,number,inputFiles}) {
       return fileName + result;
     }
     return result;
-  }).join("\n");
+  }).join("\n\n");
 }
 
 const errorMessage = 'head: illeagal option -- ';
