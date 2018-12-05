@@ -15,7 +15,7 @@ const segregateInput = function (listOfInput) {
     result.count = listOfInput[0].slice(1);
     result.inputFiles = listOfInput.slice(1);
   }
-  if( listOfInput[0].length >= 3 && listOfInput[0][1] == ('n'||'c')) {
+  if( listOfInput[0].length >= 3 && (listOfInput[0][1]=='n'|| listOfInput[0][1]=='c')) {
     result.type = listOfInput[0][1];
     result.count = listOfInput[0].slice(2);
     result.inputFiles = listOfInput.slice(1);
