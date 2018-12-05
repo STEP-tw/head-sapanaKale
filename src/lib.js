@@ -20,25 +20,27 @@ const segregateInput = function (listOfInput) {
 return result;
 }
 
-const headLines = function (reader,numberOfLines,file) {
-  let content = reader(file);
+const headLines = function (content,numberOfLines) {
   let lines = content.toString().split('\n');
   lines = lines.slice(0,numberOfLines).join('\n');
   return lines;
 }
 
-const headCharacters = function (reader,numberOfChar,file) {
-  let content = reader(file);
+const headCharacters = function (content,numberOfChar) {
   let characters = content.slice(0,numberOfChar).toString();
   return characters;
 }
 
-const headFiles = function (reader, {requirement,number,inputFiles}) {
+const headFiles = function (reader,validater,{requirement,number,inputFiles}) {
   return inputFiles.map(function(file) {
     let fileName = '==> '+ file + ' <==' + '\n';
-    let result = headCharacters(reader,number,file);
+    if (!validater(file)) {
+      return 'head: '+file+': No such file or directory';
+    }
+    let content = reader(file);
+    let result = headCharacters(content,number);
     if( requirement == 'n') {
-      result = headLines(reader,number,file);
+      result = headLines(content,number);
     }
     if (inputFiles.length > 1) {
       return fileName + result;
@@ -51,12 +53,12 @@ const errorMessage = 'head: illeagal option -- ';
 
 const usageMessage = 'usage: head [-n lines | -c bytes] [file ...]';
 
-const head = function (reader,{requirement,number,inputFiles}) {
+const head = function (reader,validater,{requirement,number,inputFiles}) {
   if (requirement != 'n' && requirement !='c') {
     return errorMessage + requirement + '\n' + usageMessage;
     process.exit();
   }
-  return headFiles(reader,{requirement,number,inputFiles});
+  return headFiles(reader,validater,{requirement,number,inputFiles});
 }
 
 module.exports = { segregateInput,

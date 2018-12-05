@@ -15,11 +15,11 @@
 */
 
 const { segregateInput, head } = require('./src/lib.js');
-const fs = require('fs');
+const { readFileSync, existsSync }  = require('fs');
 
 const main = function () {
   let parameters = segregateInput(process.argv.slice(2));
-  console.log(head(fs.readFileSync,parameters));
+  console.log(head(readFileSync,existsSync,parameters));
 }
 
 main();
