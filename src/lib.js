@@ -21,7 +21,7 @@ const segregateInput = function (listOfInput) {
     result.count = listOfInput[0].slice(2);
     result.inputFiles = listOfInput.slice(1);
   }
-  if( listOfInput[0].length == 2 && isNaN(listOfInput[0][1] && listOfInput[0][0]=='-')) {
+  if( listOfInput[0].length == 2 && isNaN(listOfInput[0][1]) && listOfInput[0][0]=='-') {
     result.type = listOfInput[0][1];
     result.count = listOfInput[1];
     result.inputFiles = listOfInput.slice(2);
