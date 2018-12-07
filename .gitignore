@@ -1,1 +1,3 @@
 *.swp
+coverage/
+.nyc_output/
