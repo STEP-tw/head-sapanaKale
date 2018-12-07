@@ -80,14 +80,14 @@ const isInvalidType = function (type) {
 }
 
 const isInvalidCount = function (count) {
-  return isNaN(count - 0) || count < 1;
+  return isNaN(count) || count < 1;
 }
 
 const head = function (fs,{type,count,files}) {
   if (isInvalidType(type)) {
     return illegalOptionMsg + type + '\n' + usageMsg;
   }
-  if (isInvalidCount(type)) {
+  if (isInvalidCount(count)) {
     return (type == 'n') ? illegalLineCountMsg+count : illegalByteCountMsg+count;
   }
   return headFiles(fs,{type,count,files});
@@ -97,4 +97,11 @@ module.exports = { segregateInput,
   headLines,
   headCharacters,
   headFiles,
-  head };
+  head,
+  isType,
+  isCount,
+  isSyntax1,
+  isSyntax2,
+  isSyntax3,
+  isInvalidType,
+  isInvalidCount };
