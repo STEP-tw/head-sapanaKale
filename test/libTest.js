@@ -3,13 +3,16 @@ const {
   segregateInput,
   headLines,
   headCharacters,
-  headFiles,
+  headFile,
   head,
+  validateInput,
+  addFilename,
+  returnResult,
   isType,
   isCount,
-  isSyntax1,
-  isSyntax2,
-  isSyntax3,
+  isOnlyNumber,
+  isNumberAndType,
+  isOnlyType,
   isInvalidType,
   isInvalidCount
 } = require("../src/lib.js");
@@ -47,34 +50,34 @@ describe("isCount", function() {
   });
 });
 
-describe("isSyntax1", function() {
+describe("isOnlyNumber", function() {
   it('should return true if provided input is in format "-number"', function() {
-    assert.deepEqual(isSyntax1("-12"), true);
+    assert.deepEqual(isOnlyNumber("-12"), true);
   });
   it('should return false if provided input is not in format "-number"', function() {
-    assert.deepEqual(isSyntax1("-n2"), false);
+    assert.deepEqual(isOnlyNumber("-n2"), false);
   });
 });
 
-describe("isSyntax2", function() {
+describe("isNumberAndType", function() {
   it('should return true if provided input is in format "-n12"', function() {
-    assert.deepEqual(isSyntax2("-n11"), true);
-    assert.deepEqual(isSyntax2("-c4"), true);
+    assert.deepEqual(isNumberAndType("-n11"), true);
+    assert.deepEqual(isNumberAndType("-c4"), true);
   });
   it('should return false if provided input is not in format "-n12"', function() {
-    assert.deepEqual(isSyntax2("-12"), false);
-    assert.deepEqual(isSyntax2("-n"), false);
+    assert.deepEqual(isNumberAndType("-12"), false);
+    assert.deepEqual(isNumberAndType("-n"), false);
   });
 });
 
-describe("isSyntax3", function() {
+describe("isOnlyType", function() {
   it('should return true if provided input is in format "-n"', function() {
-    assert.deepEqual(isSyntax3("-n"), true);
-    assert.deepEqual(isSyntax3("-c"), true);
+    assert.deepEqual(isOnlyType("-n"), true);
+    assert.deepEqual(isOnlyType("-c"), true);
   });
   it('should return false if provided input is not in format "-n"', function() {
-    assert.deepEqual(isSyntax3("-n2"), false);
-    assert.deepEqual(isSyntax3("-12"), false);
+    assert.deepEqual(isOnlyType("-n2"), false);
+    assert.deepEqual(isOnlyType("-12"), false);
   });
 });
 
@@ -142,43 +145,24 @@ describe("headCharacters", function() {
   });
 });
 
-describe("headFiles", function() {
+describe("headFile", function() {
   it("should return the lines as per provided input", function() {
-    let file = "one\ntwo\nthree\nfour";
-    let parameters = { type: "n", count: "3", files: [file] };
-    assert.deepEqual(headFiles(fs, parameters), "one\ntwo\nthree");
+    let file = "1\n2\n3";
+    assert.deepEqual(
+      headFile(fs, "n", 3, addFilename, file),
+      "==> 1\n2\n3 <==\n1\n2\n3"
+    );
   });
 
   it("should return the characters as per provided input", function() {
     let file = "one\ntwo\nthree\nfour";
-    let parameters = { type: "c", count: "2", files: [file] };
-    assert.deepEqual(headFiles(fs, parameters), "on");
-  });
-
-  it("should return the lines when multiple files are provided", function() {
-    let file = "one\ntwo\nthree";
-    let file1 = "the\na\nan";
-    let parameters = { type: "n", count: "2", files: [file, file1] };
-    let expectedOutput =
-      "==> one\ntwo\nthree <==\none\ntwo\n\n==> the\na\nan <==\nthe\na";
-    assert.deepEqual(headFiles(fs, parameters), expectedOutput);
-  });
-
-  it("should return the characters when multiple files are provided", function() {
-    let file = "one\ntwo";
-    let file1 = "three\nfour";
-    let parameters = { type: "c", count: "2", files: [file, file1] };
-    let expectedOutput = "==> one\ntwo <==\non\n\n==> three\nfour <==\nth";
-    assert.deepEqual(headFiles(fs, parameters), expectedOutput);
+    assert.deepEqual(headFile(fs, "c", 2, returnResult, file), "on");
   });
 
   it("should return the lines for file which exists and error for file which doesn't exists", function() {
-    let file = "one\ntwo\nthree";
-    let file1 = "not exists";
-    let parameters = { type: "n", count: "2", files: [file, file1] };
-    let expectedOutput =
-      "==> one\ntwo\nthree <==\none\ntwo\n\nhead: not exists: No such file or directory";
-    assert.deepEqual(headFiles(fs, parameters), expectedOutput);
+    let file = "not exists";
+    let expectedOutput = "head: not exists: No such file or directory";
+    assert.deepEqual(headFile(fs, "n", 2, addFilename, file), expectedOutput);
   });
 });
 

@@ -1,10 +1,28 @@
-const illegalOptionMsg = "head: illegal option -- ";
+const illegalOptionMsg = function(option) {
+  return "head: illegal option -- " + option;
+};
 
 const usageMsg = "usage: head [-n lines | -c bytes] [file ...]";
 
-const illegalLineCountMsg = "head: illegal line count -- ";
+const illegalLineCountMsg = function(count) {
+  return "head: illegal line count -- " + count;
+};
 
-const illegalByteCountMsg = "head: illegal byte count -- ";
+const illegalByteCountMsg = function(count) {
+  return "head: illegal byte count -- " + count;
+};
+
+const fileNotFoundMsg = function(fileName) {
+  return "head: " + fileName + ": No such file or directory";
+};
+
+const addFilename = function(fileName, content) {
+  return "==> " + fileName + " <==" + "\n" + content;
+};
+
+const returnResult = function(file, result) {
+  return result;
+};
 
 const isCount = function(string) {
   return !isNaN(string);
@@ -21,33 +39,52 @@ const isType = function(string) {
  * syntax3 = -n 12 file1 file2;
  */
 
-const isSyntax1 = function(input) {
+const isOnlyNumber = function(input) {
   return input.length > 1 && isCount(input.slice(0, 2));
 };
 
-const isSyntax2 = function(input) {
+const isNumberAndType = function(input) {
   return input.length > 2 && isType(input);
 };
 
-const isSyntax3 = function(input) {
+const isOnlyType = function(input) {
   return input.length == 2 && isType(input);
 };
 
 const segregateInput = function(input) {
-  if (isSyntax1(input[0])) {
+  if (isOnlyNumber(input[0])) {
     return { type: "n", count: input[0].slice(1), files: input.slice(1) };
   }
-  if (isSyntax2(input[0])) {
+  if (isNumberAndType(input[0])) {
     return {
       type: input[0][1],
       count: input[0].slice(2),
       files: input.slice(1)
     };
   }
-  if (isSyntax3(input[0])) {
+  if (isOnlyType(input[0])) {
     return { type: input[0][1], count: input[1], files: input.slice(2) };
   }
   return { type: "n", count: "10", files: input.slice(0) };
+};
+
+const isInvalidType = function(type) {
+  return type != "n" && type != "c";
+};
+
+const isInvalidCount = function(count) {
+  return isNaN(count) || count < 1;
+};
+
+const validateInput = function({ type, count }) {
+  if (isInvalidType(type)) {
+    return illegalOptionMsg(type) + "\n" + usageMsg;
+  }
+  if (isInvalidCount(count)) {
+    return type == "n"
+      ? illegalLineCountMsg(count)
+      : illegalByteCountMsg(count);
+  }
 };
 
 const headLines = function(content, countOfLines) {
@@ -61,57 +98,43 @@ const headCharacters = function(content, countOfChar) {
   return characters;
 };
 
-const headFiles = function(fs, { type, count, files }) {
-  return files
-    .map(function(file) {
-      if (!fs.existsSync(file)) {
-        return "head: " + file + ": No such file or directory";
-      }
-      let content = fs.readFileSync(file);
-      let result = headCharacters(content, count);
-      if (type == "n") {
-        result = headLines(content, count);
-      }
-      let fileName = "==> " + file + " <==" + "\n";
-      if (files.length > 1) {
-        return fileName + result;
-      }
-      return result;
-    })
-    .join("\n\n");
-};
+const headContent = { n: headLines, c: headCharacters };
 
-const isInvalidType = function(type) {
-  return type != "n" && type != "c";
-};
+const resultType = { false: addFilename, true: returnResult };
 
-const isInvalidCount = function(count) {
-  return isNaN(count) || count < 1;
+const headFile = function(fs, type, count, reporter, file) {
+  if (!fs.existsSync(file)) {
+    return fileNotFoundMsg(file);
+  }
+  let content = fs.readFileSync(file);
+  let result = headContent[type](content, count);
+  return reporter(file, result);
 };
 
 const head = function(fs, { type, count, files }) {
-  if (isInvalidType(type)) {
-    return illegalOptionMsg + type + "\n" + usageMsg;
+  let error = validateInput({ type, count });
+  if (error) {
+    return error;
   }
-  if (isInvalidCount(count)) {
-    return type == "n"
-      ? illegalLineCountMsg + count
-      : illegalByteCountMsg + count;
-  }
-  return headFiles(fs, { type, count, files });
+  let reporter = resultType[files.length === 1];
+  let mapper = headFile.bind(null, fs, type, count, reporter);
+  return files.map(mapper).join("\n\n");
 };
 
 module.exports = {
   segregateInput,
   headLines,
   headCharacters,
-  headFiles,
+  headFile,
   head,
+  validateInput,
+  addFilename,
+  returnResult,
   isType,
   isCount,
-  isSyntax1,
-  isSyntax2,
-  isSyntax3,
+  isOnlyNumber,
+  isNumberAndType,
+  isOnlyType,
   isInvalidType,
   isInvalidCount
 };
