@@ -33,6 +33,16 @@ describe('segregateInput', function() {
 
 const reader = file => file;
 
+const validater = function(file) {
+  if(file == 'not exists') {
+    return false;
+  }
+  return true;
+}
+
+const fs = { readFileSync : reader,
+             existsSync : validater }; 
+
 describe('headLines', function() {
   it('should return lines from provided input file of given count', function() {
     let file1 = 'one\ntwo\nthree\nfour';
@@ -48,13 +58,6 @@ describe('headCharacters', function() {
     assert.deepEqual(headCharacters(reader(file),3),expectedOutput);
   });
 });
-
-const validater = function(file) {
-  if(file == 'not exists') {
-    return false;
-  }
-  return true;
-}
 
 describe('headFiles', function() {
   it('should return the lines as per provided input', function() {
@@ -111,7 +114,7 @@ describe('head', function() {
     assert.deepEqual(head(reader,validater,parameters),expectedOutput);
   });
 
-  it('should return error message when provided does not exists', function() {
+  it('should return error message when provided file does not exists', function() {
     let file = 'not exists';
     let file1 = 'three\nfour';
     let parameters = {type:'n',count:'2',files: [file,file1]}

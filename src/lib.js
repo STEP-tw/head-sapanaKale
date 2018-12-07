@@ -57,17 +57,17 @@ const headCharacters = function (content,countOfChar) {
   return characters;
 }
 
-const headFiles = function (reader,validater,{type,count,files}) {
-  return files.map(function(file) {
-    let fileName = '==> '+ file + ' <==' + '\n';
-    if (!validater(file)) {
-      return 'head: '+file+': No such file or directory';
+const headFiles = function (fs,{type,count,files}) {
+  return files.map ( function (file) {
+    if ( !fs.existsSync (file) ) {
+      return 'head: '+ file +': No such file or directory';
     }
-    let content = reader(file);
+    let content = fs.readFileSync(file);
     let result = headCharacters(content,count);
     if( type == 'n') {
       result = headLines(content,count);
     }
+    let fileName = '==> '+ file + ' <==' + '\n';
     if (files.length > 1) {
       return fileName + result;
     }
@@ -75,18 +75,26 @@ const headFiles = function (reader,validater,{type,count,files}) {
   }).join("\n\n");
 }
 
-const head = function (reader,validater,{type,count,files}) {
-  if (type != 'n' && type !='c') {
+const isInvalidType = function (type) {
+  return type != 'n' && type !='c';
+}
+
+const isInvalidCount = function (count) {
+  return isNaN(count - 0) || count < 1;
+}
+
+const head = function (fs,{type,count,files}) {
+  if (isInvalidType(type)) {
     return illegalOptionMsg + type + '\n' + usageMsg;
   }
-  if (isNaN(count - 0) || count < 1) {
-    return (type == 'n') ? illegalLineCountMsg + count : illegalByteCountMsg + count;
+  if (isInvalidCount(type)) {
+    return (type == 'n') ? illegalLineCountMsg+count : illegalByteCountMsg+count;
   }
-  return headFiles(reader,validater,{type,count,files});
+  return headFiles(fs,{type,count,files});
 }
 
 module.exports = { segregateInput,
-                   headLines,
-                   headCharacters,
-                   headFiles,
-                   head };
+  headLines,
+  headCharacters,
+  headFiles,
+  head };
