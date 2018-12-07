@@ -1,32 +1,49 @@
-const errorMessage = 'head: illegal option -- ';
+const illegalOptionMsg = 'head: illegal option -- ';
 
-const usageMessage = 'usage: head [-n lines | -c bytes] [file ...]';
+const usageMsg = 'usage: head [-n lines | -c bytes] [file ...]';
 
-const invalidLineCount = 'head: illegal line count -- ';
+const illegalLineCountMsg = 'head: illegal line count -- ';
 
-const invalidByteCount = 'head: illegal byte count -- ';
+const illegalByteCountMsg = 'head: illegal byte count -- ';
 
-const segregateInput = function (listOfInput) {
-  let result = { type: 'n', 
-                 count: '10', 
-                 inputFiles: listOfInput.slice(0) };
-  
-  if( listOfInput[0].length >= 2 && !isNaN(listOfInput[0].slice(0,2)) ) {
-    result.count = listOfInput[0].slice(1);
-    result.inputFiles = listOfInput.slice(1);
+const isCount = function (string) {
+  return !isNaN(string);
+}
+
+const isType = function (string) {
+  return string[0] == '-' && isNaN(string[1]);
+}
+
+/*
+ * default = file1 file2;
+ * syntax1 = -12 file1 file2;
+ * syntax2 = -n12 file1 file2;
+ * syntax3 = -n 12 file1 file2;
+ */
+
+const isSyntax1 = function (input) {
+  return input.length > 1 && isCount(input.slice(0,2));
+}
+
+const isSyntax2 = function (input) {
+  return input.length > 2 && isType(input);
+}
+
+const isSyntax3 = function (input) {
+  return input.length == 2 && isType(input);
+}
+
+const segregateInput = function (input) {
+  if (isSyntax1(input[0])) {
+    return {type:'n', count: input[0].slice(1), files: input.slice(1)}
   }
-  let firstChar = listOfInput[0][0];
-  if( listOfInput[0].length >= 3 && firstChar=='-' && isNaN(listOfInput[0][1]) ) {
-    result.type = listOfInput[0][1];
-    result.count = listOfInput[0].slice(2);
-    result.inputFiles = listOfInput.slice(1);
+  if (isSyntax2(input[0])) {
+    return {type: input[0][1], count: input[0].slice(2), files: input.slice(1) }
   }
-  if( listOfInput[0].length == 2 && isNaN(listOfInput[0][1]) && listOfInput[0][0]=='-') {
-    result.type = listOfInput[0][1];
-    result.count = listOfInput[1];
-    result.inputFiles = listOfInput.slice(2);
+  if (isSyntax3(input[0])) {
+    return {type: input[0][1], count: input[1], files: input.slice(2) }
   }
-return result;
+  return { type: 'n', count: '10',files: input.slice(0) };
 }
 
 const headLines = function (content,countOfLines) {
@@ -40,8 +57,8 @@ const headCharacters = function (content,countOfChar) {
   return characters;
 }
 
-const headFiles = function (reader,validater,{type,count,inputFiles}) {
-  return inputFiles.map(function(file) {
+const headFiles = function (reader,validater,{type,count,files}) {
+  return files.map(function(file) {
     let fileName = '==> '+ file + ' <==' + '\n';
     if (!validater(file)) {
       return 'head: '+file+': No such file or directory';
@@ -51,21 +68,21 @@ const headFiles = function (reader,validater,{type,count,inputFiles}) {
     if( type == 'n') {
       result = headLines(content,count);
     }
-    if (inputFiles.length > 1) {
+    if (files.length > 1) {
       return fileName + result;
     }
     return result;
   }).join("\n\n");
 }
 
-const head = function (reader,validater,{type,count,inputFiles}) {
+const head = function (reader,validater,{type,count,files}) {
   if (type != 'n' && type !='c') {
-    return errorMessage + type + '\n' + usageMessage;
+    return illegalOptionMsg + type + '\n' + usageMsg;
   }
   if (isNaN(count - 0) || count < 1) {
-    return (type == 'n') ? invalidLineCount + count : invalidByteCount + count;
+    return (type == 'n') ? illegalLineCountMsg + count : illegalByteCountMsg + count;
   }
-  return headFiles(reader,validater,{type,count,inputFiles});
+  return headFiles(reader,validater,{type,count,files});
 }
 
 module.exports = { segregateInput,
