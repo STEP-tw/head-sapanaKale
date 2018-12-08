@@ -32,13 +32,6 @@ const isType = function(string) {
   return string[0] == "-" && isNaN(string[1]);
 };
 
-/*
- * default = file1 file2;
- * syntax1 = -12 file1 file2;
- * syntax2 = -n12 file1 file2;
- * syntax3 = -n 12 file1 file2;
- */
-
 const isOnlyNumber = function(input) {
   return input.length > 1 && isCount(input.slice(0, 2));
 };
@@ -76,14 +69,14 @@ const isInvalidCount = function(count) {
   return isNaN(count) || count < 1;
 };
 
+const illegalCountMsg = { n: illegalLineCountMsg, c: illegalByteCountMsg };
+
 const validateInput = function({ type, count }) {
   if (isInvalidType(type)) {
     return illegalOptionMsg(type) + "\n" + usageMsg;
   }
   if (isInvalidCount(count)) {
-    return type == "n"
-      ? illegalLineCountMsg(count)
-      : illegalByteCountMsg(count);
+    return illegalCountMsg[type](count);
   }
 };
 
