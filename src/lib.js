@@ -1,4 +1,4 @@
-const illegalOptionMsg = function(option, functionName) {
+const illegalOptionMsg = function (option, functionName) {
   return functionName + ": illegal option -- " + option;
 };
 
@@ -6,47 +6,47 @@ const usageMsgForHead = "usage: head [-n lines | -c bytes] [file ...]";
 
 const usageMsgForTail = "usage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]";
 
-const illegalLineCountMsg = function(count, functionName) {
+const illegalLineCountMsg = function (count, functionName) {
   return functionName + ": illegal line count -- " + count;
 };
 
-const illegalByteCountMsg = function(count, functionName) {
+const illegalByteCountMsg = function (count, functionName) {
   return functionName + ": illegal byte count -- " + count;
 };
 
-const fileNotFoundMsg = function(fileName, functionName) {
+const fileNotFoundMsg = function (fileName, functionName) {
   return functionName + ": " + fileName + ": No such file or directory";
 };
 
-const addFilename = function(fileName, content) {
+const addFilename = function (fileName, content) {
   return "==> " + fileName + " <==" + "\n" + content;
 };
 
-const returnResult = function(file, result) {
+const returnResult = function (file, result) {
   return result;
 };
 
-const isCount = function(string) {
+const isCount = function (string) {
   return !isNaN(string);
 };
 
-const isType = function(string) {
+const isType = function (string) {
   return string[0] == "-" && isNaN(string[1]);
 };
 
-const isOnlyNumber = function(input) {
+const isOnlyNumber = function (input) {
   return input.length > 1 && isCount(input.slice(0, 2));
 };
 
-const isNumberAndType = function(input) {
+const isNumberAndType = function (input) {
   return input.length > 2 && isType(input);
 };
 
-const isOnlyType = function(input) {
+const isOnlyType = function (input) {
   return input.length == 2 && isType(input);
 };
 
-const segregateInput = function(input) {
+const segregateInput = function (input) {
   if (isOnlyNumber(input[0])) {
     return { type: "n", count: input[0].slice(1), files: input.slice(1) };
   }
@@ -63,19 +63,19 @@ const segregateInput = function(input) {
   return { type: "n", count: "10", files: input.slice(0) };
 };
 
-const isInvalidType = function(type) {
+const isInvalidType = function (type) {
   return type != "n" && type != "c";
 };
 
-const isInvalidCount = function(count) {
+const isInvalidCount = function (count) {
   return isNaN(count) || count < 1;
 };
 
 const illegalCountMsg = { n: illegalLineCountMsg, c: illegalByteCountMsg };
 
-const usageMsg = { head : usageMsgForHead, tail : usageMsgForTail };
+const usageMsg = { head: usageMsgForHead, tail: usageMsgForTail };
 
-const validateInput = function({ type, count }, functionName) {
+const validateInput = function ({ type, count }, functionName) {
   if (isInvalidType(type)) {
     return illegalOptionMsg(type, functionName) + "\n" + usageMsg[functionName];
   }
@@ -84,13 +84,13 @@ const validateInput = function({ type, count }, functionName) {
   }
 };
 
-const headLines = function(content, countOfLines) {
+const headLines = function (content, countOfLines) {
   let lines = content.toString().split("\n");
   lines = lines.slice(0, countOfLines).join("\n");
   return lines;
 };
 
-const headCharacters = function(content, countOfChar) {
+const headCharacters = function (content, countOfChar) {
   let characters = content.slice(0, countOfChar).toString();
   return characters;
 };
@@ -99,7 +99,7 @@ const headContent = { n: headLines, c: headCharacters };
 
 const isSingleFile = { false: addFilename, true: returnResult };
 
-const headFile = function(fs, type, count, reporter, file) {
+const headFile = function (fs, type, count, reporter, file) {
   if (!fs.existsSync(file)) {
     return fileNotFoundMsg(file, "head");
   }
@@ -108,7 +108,7 @@ const headFile = function(fs, type, count, reporter, file) {
   return reporter(file, result);
 };
 
-const head = function(fs, { type, count, files }) {
+const head = function (fs, { type, count, files }) {
   let error = validateInput({ type, count }, "head");
   if (error) {
     return error;
@@ -118,20 +118,20 @@ const head = function(fs, { type, count, files }) {
   return files.map(mapper).join("\n\n");
 };
 
-const tailLines = function(content, count) {
+const tailLines = function (content, count) {
   let lines = content.toString().split("\n");
-  lines = lines.slice(lines.length-count).join("\n");
+  lines = lines.slice(lines.length - count).join("\n");
   return lines;
 };
 
-const tailCharacters = function(content,count) {
-  let characters = content.slice(content.length-count).toString();
+const tailCharacters = function (content, count) {
+  let characters = content.slice(content.length - count).toString();
   return characters;
 };
 
-const tailContent = { n : tailLines, c : tailCharacters };
+const tailContent = { n: tailLines, c: tailCharacters };
 
-const tailFile = function(fs, type ,count , reporter, file) {
+const tailFile = function (fs, type, count, reporter, file) {
   if (!fs.existsSync(file)) {
     return fileNotFoundMsg(file, "tail");
   }
@@ -140,7 +140,7 @@ const tailFile = function(fs, type ,count , reporter, file) {
   return reporter(file, result);
 };
 
-const tail = function(fs, { type, count, files }) {
+const tail = function (fs, { type, count, files }) {
   let error = validateInput({ type, count }, "tail");
   if (error) {
     return error;
