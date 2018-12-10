@@ -14,5 +14,12 @@
   node ./tail.js -c 5 file1 file2
 */
 
+const { segregateInput, tail } = require('./src/lib.js');
+const fs = require('fs');
 
+const main = function () {
+  let parameters = segregateInput(process.argv.slice(2));
+  console.log(tail(fs,parameters));
+}
 
+main();
