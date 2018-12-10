@@ -2,7 +2,9 @@ const illegalOptionMsg = function(option, functionName) {
   return functionName + ": illegal option -- " + option;
 };
 
-const usageMsg = "usage: head [-n lines | -c bytes] [file ...]";
+const usageMsgForHead = "usage: head [-n lines | -c bytes] [file ...]";
+
+const usageMsgForTail = "usage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]";
 
 const illegalLineCountMsg = function(count, functionName) {
   return functionName + ": illegal line count -- " + count;
@@ -71,9 +73,11 @@ const isInvalidCount = function(count) {
 
 const illegalCountMsg = { n: illegalLineCountMsg, c: illegalByteCountMsg };
 
+const usageMsg = { head : usageMsgForHead, tail : usageMsgForTail };
+
 const validateInput = function({ type, count }, functionName) {
   if (isInvalidType(type)) {
-    return illegalOptionMsg(type, functionName) + "\n" + usageMsg;
+    return illegalOptionMsg(type, functionName) + "\n" + usageMsg[functionName];
   }
   if (isInvalidCount(count)) {
     return illegalCountMsg[type](count, functionName);
@@ -93,7 +97,7 @@ const headCharacters = function(content, countOfChar) {
 
 const headContent = { n: headLines, c: headCharacters };
 
-const resultType = { false: addFilename, true: returnResult };
+const isSingleFile = { false: addFilename, true: returnResult };
 
 const headFile = function(fs, type, count, reporter, file) {
   if (!fs.existsSync(file)) {
@@ -109,7 +113,7 @@ const head = function(fs, { type, count, files }) {
   if (error) {
     return error;
   }
-  let reporter = resultType[files.length === 1];
+  let reporter = isSingleFile[files.length === 1];
   let mapper = headFile.bind(null, fs, type, count, reporter);
   return files.map(mapper).join("\n\n");
 };
@@ -125,6 +129,27 @@ const tailCharacters = function(content,count) {
   return characters;
 };
 
+const tailContent = { n : tailLines, c : tailCharacters };
+
+const tailFile = function(fs, type ,count , reporter, file) {
+  if (!fs.existsSync(file)) {
+    return fileNotFoundMsg(file, "tail");
+  }
+  let content = fs.readFileSync(file);
+  let result = tailContent[type](content, count);
+  return reporter(file, result);
+};
+
+const tail = function(fs, { type, count, files }) {
+  let error = validateInput({ type, count }, "tail");
+  if (error) {
+    return error;
+  }
+  let reporter = isSingleFile[files.length === 1];
+  let mapper = tailFile.bind(null, fs, type, count, reporter);
+  return files.map(mapper).join("\n\n");
+};
+
 module.exports = {
   segregateInput,
   headLines,
@@ -133,6 +158,8 @@ module.exports = {
   tailCharacters,
   headFile,
   head,
+  tailFile,
+  tail,
   validateInput,
   addFilename,
   returnResult,

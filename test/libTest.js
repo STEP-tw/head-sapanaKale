@@ -7,6 +7,8 @@ const {
   tailLines,
   headFile,
   head,
+  tail,
+  tailFile,
   validateInput,
   addFilename,
   returnResult,
@@ -226,5 +228,71 @@ describe("tailCharacters", function() {
     let file = "one\ntwo";
     let expectedOutput = "two";
     assert.deepEqual(tailCharacters(reader(file), 3), expectedOutput);
+  });
+});
+
+describe("tailFile", function() {
+  it("should return the lines as per provided input", function() {
+    let file = "1\n2\n3";
+    assert.deepEqual(
+      tailFile(fs, "n", 2, addFilename, file),
+      "==> 1\n2\n3 <==\n2\n3"
+    );
+  });
+
+  it("should return the characters as per provided input", function() {
+    let file = "1\n2\n3";
+    assert.deepEqual(tailFile(fs, "c", 2, returnResult, file), "\n3");
+  });
+
+  it("should return the lines for file which exists and error for file which doesn't exists", function() {
+    let file = "not exists";
+    let expectedOutput = "tail: not exists: No such file or directory";
+    assert.deepEqual(tailFile(fs, "n", 2, addFilename, file), expectedOutput);
+  });
+});
+
+describe("tail", function() {
+  it("should return error message when invalid type is provided ", function() {
+    let file = "one\ntwo";
+    let file1 = "three\nfour";
+    let parameters = { type: "e", count: "2", files: [file, file1] };
+    let expectedOutput =
+      "tail: illegal option -- e\nusage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]";
+    assert.deepEqual(tail(fs, parameters), expectedOutput);
+  });
+
+  it("should return the lines when multiple files are provided", function() {
+    let file = "one\ntwo\nthree";
+    let file1 = "the\na\nan";
+    let parameters = { type: "n", count: "2", files: [file, file1] };
+    let expectedOutput =
+      "==> one\ntwo\nthree <==\ntwo\nthree\n\n==> the\na\nan <==\na\nan";
+    assert.deepEqual(tail(fs, parameters), expectedOutput);
+  });
+
+  it("should return error message when provided file does not exists", function() {
+    let file = "not exists";
+    let file1 = "three\nfour";
+    let parameters = { type: "n", count: "2", files: [file, file1] };
+    let expectedOutput =
+      "tail: not exists: No such file or directory\n\n==> three\nfour <==\nthree\nfour";
+    assert.deepEqual(tail(fs, parameters), expectedOutput);
+  });
+
+  it("should return error message when provided count is 0", function() {
+    let file = "one\ntwo";
+    let file1 = "three\nfour";
+    let parameters = { type: "c", count: "0", files: [file, file1] };
+    let expectedOutput = "tail: illegal byte count -- 0";
+    assert.deepEqual(tail(fs, parameters), expectedOutput);
+  });
+
+  it("should return error message when invalid count is provided", function() {
+    let file = "one\ntwo";
+    let file1 = "three\nfour";
+    let parameters = { type: "n", count: "10x", files: [file, file1] };
+    let expectedOutput = "tail: illegal line count -- 10x";
+    assert.deepEqual(tail(fs, parameters), expectedOutput);
   });
 });
