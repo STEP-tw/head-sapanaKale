@@ -133,7 +133,7 @@ const tailLines = function (content, count) {
 };
 
 const tailCharacters = function (content, count) {
-  let characters = content.slice(content.length - count-1,content.length-1).toString();
+  let characters = content.slice(content.length - count).toString();
   return characters;
 };
 

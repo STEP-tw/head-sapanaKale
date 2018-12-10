@@ -225,7 +225,7 @@ describe("tailLines", function () {
 
 describe("tailCharacters", function () {
   it("should return endcharacters from provided input file of given count ", function () {
-    let file = "one\ntwo\n";
+    let file = "one\ntwo";
     let expectedOutput = "two";
     assert.deepEqual(tailCharacters(reader(file), 3), expectedOutput);
   });
@@ -241,7 +241,7 @@ describe("tailFile", function () {
   });
 
   it("should return the characters as per provided input", function () {
-    let file = "1\n2\n3\n";
+    let file = "1\n2\n3";
     assert.deepEqual(tailFile(fs, "c", 2, returnResult, file), "\n3");
   });
 
