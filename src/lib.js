@@ -1,19 +1,19 @@
-const illegalOptionMsg = function(option) {
-  return "head: illegal option -- " + option;
+const illegalOptionMsg = function(option, functionName) {
+  return functionName + ": illegal option -- " + option;
 };
 
 const usageMsg = "usage: head [-n lines | -c bytes] [file ...]";
 
-const illegalLineCountMsg = function(count) {
-  return "head: illegal line count -- " + count;
+const illegalLineCountMsg = function(count, functionName) {
+  return functionName + ": illegal line count -- " + count;
 };
 
-const illegalByteCountMsg = function(count) {
-  return "head: illegal byte count -- " + count;
+const illegalByteCountMsg = function(count, functionName) {
+  return functionName + ": illegal byte count -- " + count;
 };
 
-const fileNotFoundMsg = function(fileName) {
-  return "head: " + fileName + ": No such file or directory";
+const fileNotFoundMsg = function(fileName, functionName) {
+  return functionName + ": " + fileName + ": No such file or directory";
 };
 
 const addFilename = function(fileName, content) {
@@ -71,12 +71,12 @@ const isInvalidCount = function(count) {
 
 const illegalCountMsg = { n: illegalLineCountMsg, c: illegalByteCountMsg };
 
-const validateInput = function({ type, count }) {
+const validateInput = function({ type, count }, functionName) {
   if (isInvalidType(type)) {
-    return illegalOptionMsg(type) + "\n" + usageMsg;
+    return illegalOptionMsg(type, functionName) + "\n" + usageMsg;
   }
   if (isInvalidCount(count)) {
-    return illegalCountMsg[type](count);
+    return illegalCountMsg[type](count, functionName);
   }
 };
 
@@ -97,7 +97,7 @@ const resultType = { false: addFilename, true: returnResult };
 
 const headFile = function(fs, type, count, reporter, file) {
   if (!fs.existsSync(file)) {
-    return fileNotFoundMsg(file);
+    return fileNotFoundMsg(file, "head");
   }
   let content = fs.readFileSync(file);
   let result = headContent[type](content, count);
@@ -105,7 +105,7 @@ const headFile = function(fs, type, count, reporter, file) {
 };
 
 const head = function(fs, { type, count, files }) {
-  let error = validateInput({ type, count });
+  let error = validateInput({ type, count }, "head");
   if (error) {
     return error;
   }
