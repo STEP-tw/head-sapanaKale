@@ -217,7 +217,7 @@ describe("head", function () {
 
 describe("tailLines", function () {
   it("should return endlines from provided input file of given count", function () {
-    let file1 = "one\ntwo\nthree\nfour\n";
+    let file1 = "one\ntwo\nthree\nfour";
     let expectedOutput = "three\nfour";
     assert.deepEqual(tailLines(reader(file1), 2), expectedOutput);
   });
@@ -232,20 +232,20 @@ describe("tailCharacters", function () {
 });
 
 describe("tailFile", function () {
-  it("should return the lines as per provided input", function () {
-    let file = "1\n2\n3\n";
+  it("should return the endlines as per provided input", function () {
+    let file = "1\n2\n3";
     assert.deepEqual(
       tailFile(fs, "n", 2, addFilename, file),
-      "==> 1\n2\n3\n <==\n2\n3"
+      "==> 1\n2\n3 <==\n2\n3"
     );
   });
 
-  it("should return the characters as per provided input", function () {
+  it("should return the endcharacters as per provided input", function () {
     let file = "1\n2\n3";
     assert.deepEqual(tailFile(fs, "c", 2, returnResult, file), "\n3");
   });
 
-  it("should return the lines for file which exists and error for file which doesn't exists", function () {
+  it("should return the endlines for file which exists and error for file which doesn't exists", function () {
     let file = "not exists";
     let expectedOutput = "tail: not exists: No such file or directory";
     assert.deepEqual(tailFile(fs, "n", 2, addFilename, file), expectedOutput);
@@ -254,43 +254,43 @@ describe("tailFile", function () {
 
 describe("tail", function () {
   it("should return error message when invalid type is provided ", function () {
-    let file = "one\ntwo\n";
-    let file1 = "three\nfour\n";
+    let file = "one\ntwo";
+    let file1 = "three\nfour";
     let parameters = { type: "e", count: "2", files: [file, file1] };
     let expectedOutput =
       "tail: illegal option -- e\nusage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]";
     assert.deepEqual(tail(fs, parameters), expectedOutput);
   });
 
-  it("should return the lines when multiple files are provided", function () {
-    let file = "one\ntwo\nthree\n";
-    let file1 = "the\na\nan\n";
+  it("should return the endlines when multiple files are provided", function () {
+    let file = "one\ntwo\nthree";
+    let file1 = "the\na\nan";
     let parameters = { type: "n", count: "2", files: [file, file1] };
     let expectedOutput =
-      "==> one\ntwo\nthree\n <==\ntwo\nthree\n\n==> the\na\nan\n <==\na\nan";
+      "==> one\ntwo\nthree <==\ntwo\nthree\n\n==> the\na\nan <==\na\nan";
     assert.deepEqual(tail(fs, parameters), expectedOutput);
   });
 
   it("should return error message when provided file does not exists", function () {
     let file = "not exists";
-    let file1 = "three\nfour\n";
+    let file1 = "three\nfour";
     let parameters = { type: "n", count: "2", files: [file, file1] };
     let expectedOutput =
-      "tail: not exists: No such file or directory\n\n==> three\nfour\n <==\nthree\nfour";
+      "tail: not exists: No such file or directory\n\n==> three\nfour <==\nthree\nfour";
     assert.deepEqual(tail(fs, parameters), expectedOutput);
   });
 
-  it("should return error message when provided count is 0", function () {
-    let file = "one\ntwo\n";
-    let file1 = "three\nfour\n";
+  it("should treat 0 as legal count", function () {
+    let file = "one\ntwo";
+    let file1 = "three\nfour";
     let parameters = { type: "c", count: "0", files: [file, file1] };
-    let expectedOutput = "==> one\ntwo\n <==\n\n\n==> three\nfour\n <==\n";
+    let expectedOutput = "==> one\ntwo <==\n\n\n==> three\nfour <==\n";
     assert.deepEqual(tail(fs, parameters), expectedOutput);
   });
 
   it("should return error message when invalid count is provided", function () {
-    let file = "one\ntwo\n";
-    let file1 = "three\nfour\n";
+    let file = "one\ntwo";
+    let file1 = "three\nfour";
     let parameters = { type: "n", count: "10x", files: [file, file1] };
     let expectedOutput = "tail: illegal offset -- 10x";
     assert.deepEqual(tail(fs, parameters), expectedOutput);

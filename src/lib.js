@@ -128,7 +128,7 @@ const head = function (fs, { type, count, files }) {
 
 const tailLines = function (content, count) {
   let lines = content.toString().split("\n");
-  lines = lines.slice(lines.length - count-1,lines.length-1).join("\n");
+  lines = lines.slice(lines.length - count).join("\n");
   return lines;
 };
 
