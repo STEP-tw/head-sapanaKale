@@ -284,7 +284,7 @@ describe("tail", function () {
     let file = "one\ntwo";
     let file1 = "three\nfour";
     let parameters = { type: "c", count: "0", files: [file, file1] };
-    let expectedOutput = "tail: illegal byte count -- 0";
+    let expectedOutput = "==> one\ntwo <==\n\n\n==> three\nfour <==\n";
     assert.deepEqual(tail(fs, parameters), expectedOutput);
   });
 
@@ -292,7 +292,7 @@ describe("tail", function () {
     let file = "one\ntwo";
     let file1 = "three\nfour";
     let parameters = { type: "n", count: "10x", files: [file, file1] };
-    let expectedOutput = "tail: illegal line count -- 10x";
+    let expectedOutput = "tail: illegal offset -- 10x";
     assert.deepEqual(tail(fs, parameters), expectedOutput);
   });
 });
