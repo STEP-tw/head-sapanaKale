@@ -114,10 +114,23 @@ const head = function(fs, { type, count, files }) {
   return files.map(mapper).join("\n\n");
 };
 
+const tailLines = function(content, count) {
+  let lines = content.toString().split("\n");
+  lines = lines.slice(lines.length-count).join("\n");
+  return lines;
+};
+
+const tailCharacters = function(content,count) {
+  let characters = content.slice(content.length-count).toString();
+  return characters;
+};
+
 module.exports = {
   segregateInput,
   headLines,
   headCharacters,
+  tailLines,
+  tailCharacters,
   headFile,
   head,
   validateInput,

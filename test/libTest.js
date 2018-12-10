@@ -3,6 +3,8 @@ const {
   segregateInput,
   headLines,
   headCharacters,
+  tailCharacters,
+  tailLines,
   headFile,
   head,
   validateInput,
@@ -208,5 +210,21 @@ describe("head", function() {
     let parameters = { type: "n", count: "10x", files: [file, file1] };
     let expectedOutput = "head: illegal line count -- 10x";
     assert.deepEqual(head(fs, parameters), expectedOutput);
+  });
+});
+
+describe("tailLines", function() {
+  it("should return endlines from provided input file of given count", function() {
+    let file1 = "one\ntwo\nthree\nfour";
+    let expectedOutput = "three\nfour";
+    assert.deepEqual(tailLines(reader(file1), 2), expectedOutput);
+  });
+});
+
+describe("tailCharacters", function() {
+  it("should return endcharacters from provided input file of given count ", function() {
+    let file = "one\ntwo";
+    let expectedOutput = "two";
+    assert.deepEqual(tailCharacters(reader(file), 3), expectedOutput);
   });
 });
