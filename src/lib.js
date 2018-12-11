@@ -128,12 +128,12 @@ const head = function (fs, { type, count, files }) {
 
 const tailLines = function (content, count) {
   let lines = content.toString().split("\n");
-  lines = lines.slice(lines.length - count).join("\n");
+  lines = lines.slice(Math.max(lines.length - count,0)).join("\n");
   return lines;
 };
 
 const tailCharacters = function (content, count) {
-  let characters = content.slice(content.length - count).toString();
+  let characters = content.slice(Math.max(content.length-count,0)).toString();
   return characters;
 };
 
