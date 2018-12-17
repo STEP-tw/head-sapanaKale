@@ -20,7 +20,7 @@ const isInvalidOption = function (option) {
 
 const isInvalidCount = function (count, functionName) {
     if (functionName == 'tail') {
-        return isNaN(count);
+        return isNaN(count) || count < 0;
     }
     return isNaN(count) || count < 1;
 };
@@ -44,6 +44,7 @@ const validateInput = function ({ option, count }, functionName) {
     if (isInvalidCount(count, functionName)) {
         return invalidCountMsg[functionName](count, type[option]);
     }
+    return "";
 };
 
 module.exports = { validateInput, fileNotFoundMsg, isInvalidCount, isInvalidOption }
