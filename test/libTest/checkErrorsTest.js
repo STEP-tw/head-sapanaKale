@@ -1,18 +1,18 @@
 const assert = require("assert");
 
 const {
-    isInvalidType,
+    isInvalidOption,
     isInvalidCount
 } = require("../../src/lib/checkErrors.js");
 
-describe("isInvalidType", function () {
-    it("should return false if provided type is one of n and c", function () {
-        assert.deepEqual(isInvalidType("n"), false);
-        assert.deepEqual(isInvalidType("c"), false);
+describe("isInvalidOption", function () {
+    it("should return false if provided option is one of n and c", function () {
+        assert.deepEqual(isInvalidOption("n"), false);
+        assert.deepEqual(isInvalidOption("c"), false);
     });
-    it("should return true if provided type is not n nor c", function () {
-        assert.deepEqual(isInvalidType("e"), true);
-        assert.deepEqual(isInvalidType("nc"), true);
+    it("should return true if provided option is not n nor c", function () {
+        assert.deepEqual(isInvalidOption("e"), true);
+        assert.deepEqual(isInvalidOption("nc"), true);
     });
 });
 

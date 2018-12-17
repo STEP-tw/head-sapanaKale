@@ -22,42 +22,42 @@ const returnResult = function (file, result) {
 
 const isSingleFile = { false: addFilename, true: returnResult };
 
-const headFile = function (fs, type, count, reporter, file) {
+const headFile = function (fs, option, count, reporter, file) {
   if (!fs.existsSync(file)) {
     return fileNotFoundMsg(file, "head");
   }
   let content = fs.readFileSync(file);
-  let result = fetchContent(content, count, delimiter[type], "head");
+  let result = fetchContent(content, count, delimiter[option], "head");
   return reporter(file, result);
 };
 
-const head = function ({ type, count, files }, fs) {
-  let error = validateInput({ type, count }, "head");
+const head = function ({ option, count, files }, fs) {
+  let error = validateInput({ option, count }, "head");
   if (error) {
     return error;
   }
   let reporter = isSingleFile[files.length === 1];
-  let mapper = headFile.bind(null, fs, type, count, reporter);
+  let mapper = headFile.bind(null, fs, option, count, reporter);
   return files.map(mapper).join("\n\n");
 };
 
 
-const tailFile = function (fs, type, count, reporter, file) {
+const tailFile = function (fs, option, count, reporter, file) {
   if (!fs.existsSync(file)) {
     return fileNotFoundMsg(file, "tail");
   }
   let content = fs.readFileSync(file);
-  let result = fetchContent(content, count, delimiter[type], "tail");
+  let result = fetchContent(content, count, delimiter[option], "tail");
   return reporter(file, result);
 };
 
-const tail = function ({ type, count, files }, fs) {
-  let error = validateInput({ type, count }, "tail");
+const tail = function ({ option, count, files }, fs) {
+  let error = validateInput({ option, count }, "tail");
   if (error) {
     return error;
   }
   let reporter = isSingleFile[files.length === 1];
-  let mapper = tailFile.bind(null, fs, type, count, reporter);
+  let mapper = tailFile.bind(null, fs, option, count, reporter);
   return files.map(mapper).join("\n\n");
 };
 

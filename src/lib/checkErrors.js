@@ -13,8 +13,8 @@ const illegalByteCountMsg = function (count, functionName) {
 const fileNotFoundMsg = function (fileName, functionName) {
     return functionName + ": " + fileName + ": No such file or directory";
 };
-const isInvalidType = function (type) {
-    return type != "n" && type != "c";
+const isInvalidOption = function (option) {
+    return option != "n" && option != "c";
 };
 
 const isInvalidCount = function (count, functionName) {
@@ -34,16 +34,16 @@ const usageMsgForTail = "usage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [f
 
 const usageMsg = { head: usageMsgForHead, tail: usageMsgForTail };
 
-const validateInput = function ({ type, count }, functionName) {
-    if (isInvalidType(type)) {
-        return illegalOptionMsg(type, functionName) + "\n" + usageMsg[functionName];
+const validateInput = function ({ option, count }, functionName) {
+    if (isInvalidOption(option)) {
+        return illegalOptionMsg(option, functionName) + "\n" + usageMsg[functionName];
     }
     if (isInvalidCount(count, functionName)) {
         if (functionName == 'tail') {
             return illegalOffsetMsg + count;
         }
-        return illegalCountMsg[type](count, functionName);
+        return illegalCountMsg[option](count, functionName);
     }
 };
 
-module.exports = { validateInput, fileNotFoundMsg, isInvalidCount, isInvalidType }
+module.exports = { validateInput, fileNotFoundMsg, isInvalidCount, isInvalidOption }
