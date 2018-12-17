@@ -19,7 +19,7 @@ const fs = require('fs');
 
 const main = function () {
   let parameters = segregateInput(process.argv.slice(2));
-  console.log(head(fs,parameters));
+  console.log(head(parameters, fs));
 }
 
 main();

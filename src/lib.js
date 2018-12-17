@@ -113,7 +113,7 @@ const headFile = function (fs, type, count, reporter, file) {
   return reporter(file, result);
 };
 
-const head = function (fs, { type, count, files }) {
+const head = function ({ type, count, files }, fs) {
   let error = validateInput({ type, count }, "head");
   if (error) {
     return error;
@@ -133,7 +133,7 @@ const tailFile = function (fs, type, count, reporter, file) {
   return reporter(file, result);
 };
 
-const tail = function (fs, { type, count, files }) {
+const tail = function ({ type, count, files }, fs) {
   let error = validateInput({ type, count }, "tail");
   if (error) {
     return error;

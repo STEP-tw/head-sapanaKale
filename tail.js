@@ -19,7 +19,7 @@ const fs = require('fs');
 
 const main = function () {
   let parameters = segregateInput(process.argv.slice(2));
-  console.log(tail(fs,parameters));
+  console.log(tail(parameters, fs));
 }
 
 main();
