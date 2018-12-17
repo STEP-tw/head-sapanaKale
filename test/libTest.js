@@ -1,10 +1,7 @@
 const assert = require("assert");
 const {
   segregateInput,
-  headLines,
-  headCharacters,
-  tailCharacters,
-  tailLines,
+  fetchContent,
   headFile,
   head,
   tail,
@@ -133,20 +130,27 @@ describe("segregateInput", function () {
   });
 });
 
-describe("headLines", function () {
-  it("should return lines from provided input file of given count", function () {
-    let file1 = "one\ntwo\nthree\nfour";
-    let expectedOutput = "one\ntwo";
-    assert.deepEqual(headLines(reader(file1), 2), expectedOutput);
+describe("fetchContent", function () {
+  describe("context - head", function () {
+    it("should return the toplines as per provided count when delimiter is '\n'", function () {
+      let numbers = "1\n2\n3";
+      assert.deepEqual(fetchContent(numbers, 2, "\n", "head"), "1\n2");
+    });
+    it("should return the topbytes as per provided count when delimiter is ''", function () {
+      let numbers = "1\n2\n3";
+      assert.deepEqual(fetchContent(numbers, 2, "", "head"), "1\n");
+    });
   });
-});
-
-describe("headCharacters", function () {
-  it("should return characters from provided input file of given count ", function () {
-    let file = "one\ntwo";
-    let expectedOutput = "one";
-    assert.deepEqual(headCharacters(reader(file), 3), expectedOutput);
-  });
+  describe("context - tail", function () {
+    it("should return the endlines as per provided count when delimiter is '\n'", function () {
+      let numbers = "1\n2\n3";
+      assert.deepEqual(fetchContent(numbers, 2, "\n", "tail"), "2\n3");
+    });
+    it("should return the endbytes as per provided count when delimiter is ''", function () {
+      let numbers = "1\n2\n3";
+      assert.deepEqual(fetchContent(numbers, 2, "", "tail"), "\n3");
+    });
+  })
 });
 
 describe("headFile", function () {
@@ -212,22 +216,6 @@ describe("head", function () {
     let parameters = { type: "n", count: "10x", files: [file, file1] };
     let expectedOutput = "head: illegal line count -- 10x";
     assert.deepEqual(head(fs, parameters), expectedOutput);
-  });
-});
-
-describe("tailLines", function () {
-  it("should return endlines from provided input file of given count", function () {
-    let file1 = "one\ntwo\nthree\nfour";
-    let expectedOutput = "three\nfour";
-    assert.deepEqual(tailLines(reader(file1), 2), expectedOutput);
-  });
-});
-
-describe("tailCharacters", function () {
-  it("should return endcharacters from provided input file of given count ", function () {
-    let file = "one\ntwo";
-    let expectedOutput = "two";
-    assert.deepEqual(tailCharacters(reader(file), 3), expectedOutput);
   });
 });
 

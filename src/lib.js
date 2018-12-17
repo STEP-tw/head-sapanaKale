@@ -92,18 +92,15 @@ const validateInput = function ({ type, count }, functionName) {
   }
 };
 
-const headLines = function (content, countOfLines) {
-  let lines = content.toString().split("\n");
-  lines = lines.slice(0, countOfLines).join("\n");
-  return lines;
+const fetchContent = function (content, count, delimiter, context) {
+  let result = content.toString().split(delimiter);
+  if (context == "head") {
+  return result.slice(0,count).join(delimiter);
+  };
+  return result.slice(Math.max(result.length-count,0)).join(delimiter);
 };
 
-const headCharacters = function (content, countOfChar) {
-  let characters = content.slice(0, countOfChar).toString();
-  return characters;
-};
-
-const headContent = { n: headLines, c: headCharacters };
+const delimiter = {n : '\n', c : ""};
 
 const isSingleFile = { false: addFilename, true: returnResult };
 
@@ -112,7 +109,7 @@ const headFile = function (fs, type, count, reporter, file) {
     return fileNotFoundMsg(file, "head");
   }
   let content = fs.readFileSync(file);
-  let result = headContent[type](content, count);
+  let result = fetchContent(content, count, delimiter[type], "head");
   return reporter(file, result);
 };
 
@@ -126,25 +123,13 @@ const head = function (fs, { type, count, files }) {
   return files.map(mapper).join("\n\n");
 };
 
-const tailLines = function (content, count) {
-  let lines = content.toString().split("\n");
-  lines = lines.slice(Math.max(lines.length - count,0)).join("\n");
-  return lines;
-};
-
-const tailCharacters = function (content, count) {
-  let characters = content.slice(Math.max(content.length-count,0)).toString();
-  return characters;
-};
-
-const tailContent = { n: tailLines, c: tailCharacters };
 
 const tailFile = function (fs, type, count, reporter, file) {
   if (!fs.existsSync(file)) {
     return fileNotFoundMsg(file, "tail");
   }
   let content = fs.readFileSync(file);
-  let result = tailContent[type](content, count);
+  let result = fetchContent(content, count, delimiter[type], "tail");
   return reporter(file, result);
 };
 
@@ -160,10 +145,7 @@ const tail = function (fs, { type, count, files }) {
 
 module.exports = {
   segregateInput,
-  headLines,
-  headCharacters,
-  tailLines,
-  tailCharacters,
+  fetchContent,
   headFile,
   head,
   tailFile,
