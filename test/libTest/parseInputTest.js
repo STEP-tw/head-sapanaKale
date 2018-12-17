@@ -2,10 +2,10 @@ const assert = require("assert");
 
 const {
     isOption,
-    isCount,
-    isOnlyNumber,
+    isNumber,
+    isOnlyCount,
     isOnlyOption,
-    isNumberAndOption,
+    isOptionAndCount,
     segregateInput
 } = require("../../src/lib/parseInput.js");
 
@@ -20,34 +20,34 @@ describe("isOption", function () {
     });
 });
 
-describe("isCount", function () {
+describe("isNumber", function () {
     it("should return true if provided string is number", function () {
-        assert.deepEqual(isCount("-12"), true);
-        assert.deepEqual(isCount("12"), true);
+        assert.deepEqual(isNumber("-12"), true);
+        assert.deepEqual(isNumber("12"), true);
     });
     it("should return false if provided string is not a number", function () {
-        assert.deepEqual(isCount("45h"), false);
-        assert.deepEqual(isCount("-4hd"), false);
+        assert.deepEqual(isNumber("45h"), false);
+        assert.deepEqual(isNumber("-4hd"), false);
     });
 });
 
-describe("isOnlyNumber", function () {
+describe("isOnlyCount", function () {
     it('should return true if provided input is in format "-number"', function () {
-        assert.deepEqual(isOnlyNumber("-12"), true);
+        assert.deepEqual(isOnlyCount("-12"), true);
     });
     it('should return false if provided input is not in format "-number"', function () {
-        assert.deepEqual(isOnlyNumber("-n2"), false);
+        assert.deepEqual(isOnlyCount("-n2"), false);
     });
 });
 
-describe("isNumberAndOption", function () {
+describe("isOptionAnd", function () {
     it('should return true if provided input is in format "-n12"', function () {
-        assert.deepEqual(isNumberAndOption("-n11"), true);
-        assert.deepEqual(isNumberAndOption("-c4"), true);
+        assert.deepEqual(isOptionAndCount("-n11"), true);
+        assert.deepEqual(isOptionAndCount("-c4"), true);
     });
     it('should return false if provided input is not in format "-n12"', function () {
-        assert.deepEqual(isNumberAndOption("-12"), false);
-        assert.deepEqual(isNumberAndOption("-n"), false);
+        assert.deepEqual(isOptionAndCount("-12"), false);
+        assert.deepEqual(isOptionAndCount("-n"), false);
     });
 });
 
