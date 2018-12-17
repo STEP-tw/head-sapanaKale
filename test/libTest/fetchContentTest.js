@@ -8,7 +8,7 @@ const {
   tailFile,
   addFilename,
   returnResult
-} = require("../../src/lib/fileContent.js");
+} = require("../../src/lib/fetchContent.js");
 
 const fileContents = {
   "numbers1To5.txt": "1\n2\n3\n4\n5",
