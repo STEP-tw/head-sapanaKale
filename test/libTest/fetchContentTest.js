@@ -119,6 +119,21 @@ describe("head", function () {
       }];
       assert.deepEqual(actualOutput, expectedOutput);
     });
+
+    it("should return error message when illegal option is given", function () {
+      let parameters = { option: "r", count: "3", files: ["numbers1To5.txt", "vowels.txt"] }
+      let actualOutput = head(parameters, fs);
+      let expectedOutput = "head: illegal option -- r\nusage: head [-n lines | -c bytes] [file ...]";
+      assert.deepEqual(actualOutput, expectedOutput);
+    });
+
+    it("should return error message for illegal count", function () {
+      let parameters = { option: "n", count: "-7e", files: ["numbers1To5.txt", "vowels.txt"] }
+      let actualOutput = head(parameters, fs);
+      let expectedOutput = "head: illegal line count -- -7e";
+      assert.deepEqual(actualOutput, expectedOutput);
+    });
+
   });
 });
 
@@ -161,5 +176,20 @@ describe("tail", function () {
       }];
       assert.deepEqual(actualOutput, expectedOutput);
     });
+
+    it("should return error message when illegal option is given", function () {
+      let parameters = { option: "g", count: "3", files: ["numbers1To5.txt", "vowels.txt"] }
+      let actualOutput = tail(parameters, fs);
+      let expectedOutput = "tail: illegal option -- g\nusage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]";
+      assert.deepEqual(actualOutput, expectedOutput);
+    });
+
+    it("should return error message for illegal count", function () {
+      let parameters = { option: "n", count: "-7", files: ["numbers1To5.txt", "vowels.txt"] }
+      let actualOutput = tail(parameters, fs);
+      let expectedOutput = "tail: illegal offset -- -7";
+      assert.deepEqual(actualOutput, expectedOutput);
+    });
+
   });
 });
