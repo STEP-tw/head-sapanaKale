@@ -27,18 +27,18 @@ const requiredText = { head : { n : headLines, c : headBytes },
                         };
 
 const getContents = function (command, { option, count, files }, fs) {
-  let error = validateInput({option, count}, command);
+  let error = validateInput({ option, count }, command);
   if (error) {
     return error;
   }
   return files.map(function (filename) {
-    let fileText = fs.readFileSync(filename);
     let fileContents = {
       name: filename,
       isExists: fs.existsSync(filename),
       textToReturn: fileNotFoundMsg.bind(null, command, filename)()
     };
     if (fileContents.isExists == true) {
+      let fileText = fs.readFileSync(filename);
       fileContents.textToReturn = requiredText[command][option].bind(null, count, fileText)();
     };
     return fileContents;
