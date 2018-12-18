@@ -10,7 +10,7 @@ const illegalOffsetMsg = function (count) {
     return "tail: illegal offset -- " + count;
 };
 
-const fileNotFoundMsg = function (fileName, functionName) {
+const fileNotFoundMsg = function (functionName, fileName) {
     return functionName + ": " + fileName + ": No such file or directory";
 };
 
