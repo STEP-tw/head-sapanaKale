@@ -6,6 +6,8 @@ const {
     isOnlyCount,
     isOnlyOption,
     isOptionAndCount,
+    addFilename,
+    returnContent,
     segregateInput
 } = require("../../src/lib/parseInput.js");
 
@@ -65,25 +67,25 @@ describe("isOnlyOption", function () {
 describe("segregateInput", function () {
     it("should return parameter object when line/byte and count is provided combine", function () {
         let actualInput = segregateInput(["-n5", "file1"]);
-        let expectedOutput = { option: "n", count: "5", files: ["file1"] };
+        let expectedOutput = { option: "n", count: "5", files: ["file1"], outputView: returnContent };
         assert.deepEqual(actualInput, expectedOutput);
     });
 
     it("should return parameter object with option as n when only count is provide", function () {
         let actualInput = segregateInput(["-5", "file1"]);
-        let expectedOutput = { option: "n", count: "5", files: ["file1"] };
+        let expectedOutput = { option: "n", count: "5", files: ["file1"], outputView: returnContent };
         assert.deepEqual(actualInput, expectedOutput);
     });
 
     it("should return parameter object when line/byte and count is provided separately", function () {
         let actualInput = segregateInput(["-c", "3", "file1", "file2"]);
-        let expectedOutput = { option: "c", count: "3", files: ["file1", "file2"] };
         assert.deepEqual(actualInput, expectedOutput);
     });
-
+    
+    let expectedOutput = { option: "c", count: "3", files: ["file1", "file2"], outputView: addFilename };
     it("should return object with default option-n and count-10 when only inputs files are provided", function () {
         let actualInput = segregateInput(["file1", "file2"]);
-        let expectedOutput = { option: "n", count: "10", files: ["file1", "file2"] };
+        let expectedOutput = { option: "n", count: "10", files: ["file1", "file2"], outputView: addFilename };
         assert.deepEqual(actualInput, expectedOutput);
     });
 });
