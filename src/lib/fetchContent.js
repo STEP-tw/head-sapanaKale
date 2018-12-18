@@ -1,72 +1,61 @@
-const { segregateInput } = require("./parseInput.js")
+const { fileNotFoundMsg, validateInput } = require("./checkErrors.js");
 
-const { validateInput, fileNotFoundMsg } = require("./checkErrors.js")
+const take = function (count, list) {
+  return list.slice(0,count);
+};
 
-const delimiter = {n : '\n', c : ""};
+const last = function (count, list) {
+  return list.slice(-count);
+};
 
-const fetchContent = function (content, count, delimiter, context) {
+const fetchContent = function (delimiter, fetcher, count, content) {
   let result = content.toString().split(delimiter);
-  if (context == "head") {
-  return result.slice(0,count).join(delimiter);
-  };
-  return result.slice(Math.max(result.length-count,0)).join(delimiter);
+  result = fetcher( count, result);
+  return result.join(delimiter);
 };
 
-const addFilename = function (fileName, content) {
-  return "==> " + fileName + " <==" + "\n" + content;
-};
+const headLines = fetchContent.bind(null, "\n", take);
 
-const returnResult = function (file, result) {
-  return result;
-};
+const headBytes = fetchContent.bind(null, "", take);
 
-const isSingleFile = { false: addFilename, true: returnResult };
+const tailLines = fetchContent.bind(null, "\n", last);
 
-const headFile = function (fs, option, count, reporter, file) {
-  if (!fs.existsSync(file)) {
-    return fileNotFoundMsg(file, "head");
-  }
-  let content = fs.readFileSync(file);
-  let result = fetchContent(content, count, delimiter[option], "head");
-  return reporter(file, result);
-};
+const tailBytes = fetchContent.bind(null, "", last);
 
-const head = function ({ option, count, files }, fs) {
-  let error = validateInput({ option, count }, "head");
+const requiredText = { head : { n : headLines, c : headBytes },
+                          tail : { n : tailLines, c : tailBytes }
+                        };
+
+const getContents = function (command, { option, count, files }, fs) {
+  let error = validateInput({option, count}, command);
   if (error) {
     return error;
   }
-  let reporter = isSingleFile[files.length === 1];
-  let mapper = headFile.bind(null, fs, option, count, reporter);
-  return files.map(mapper).join("\n\n");
+  return files.map(function (filename) {
+    let fileText = fs.readFileSync(filename);
+    let fileContents = {
+      name: filename,
+      isExists: fs.existsSync(filename),
+      textToReturn: fileNotFoundMsg.bind(null, command, filename)()
+    };
+    if (fileContents.isExists == true) {
+      fileContents.textToReturn = requiredText[command][option].bind(null, count, fileText)();
+    };
+    return fileContents;
+  });
 };
 
+const head = getContents.bind(null, "head");
 
-const tailFile = function (fs, option, count, reporter, file) {
-  if (!fs.existsSync(file)) {
-    return fileNotFoundMsg(file, "tail");
-  }
-  let content = fs.readFileSync(file);
-  let result = fetchContent(content, count, delimiter[option], "tail");
-  return reporter(file, result);
-};
-
-const tail = function ({ option, count, files }, fs) {
-  let error = validateInput({ option, count }, "tail");
-  if (error) {
-    return error;
-  }
-  let reporter = isSingleFile[files.length === 1];
-  let mapper = tailFile.bind(null, fs, option, count, reporter);
-  return files.map(mapper).join("\n\n");
-};
+const tail = getContents.bind(null, "tail");
 
 module.exports = {
-  fetchContent,
-  headFile,
+  take,
+  last,
+  headLines,
+  headBytes,
+  tailLines,
+  tailBytes,
   head,
-  tailFile,
   tail,
-  addFilename,
-  returnResult,
 };
