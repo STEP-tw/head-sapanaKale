@@ -14,12 +14,16 @@
   node ./tail.js -c 5 file1 file2
 */
 
-const { segregateInput, tail } = require('./src/lib.js');
+const { tail } = require('./src/lib/fetchContent.js');
+const { formatOutput } = require('./src/lib/formatOutput.js');
+const { segregateInput } = require('./src/lib/parseInput.js');
+
 const fs = require('fs');
 
 const main = function () {
   let parameters = segregateInput(process.argv.slice(2));
-  console.log(tail(parameters, fs));
-}
+  let output = tail(parameters, fs);
+  console.log(formatOutput(output));
+};
 
 main();
