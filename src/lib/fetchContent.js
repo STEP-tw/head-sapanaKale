@@ -1,5 +1,3 @@
-const { fileNotFoundMsg, validateInput } = require("./checkErrors.js");
-
 const take = function (count, list) {
   return list.slice(0,count);
 };
@@ -22,27 +20,23 @@ const tailLines = fetchContent.bind(null, "\n", last);
 
 const tailBytes = fetchContent.bind(null, "", last);
 
-const requiredText = { head : { line : headLines, byte : headBytes },
+const requiredFunc = { head : { line : headLines, byte : headBytes },
                        tail : { line : tailLines, byte : tailBytes }
                      };
 
-const getContents = function (command, { option, count, files }, fs) {
-  let error = validateInput(command, { option, count });
-  if (error) {
-    return error;
-  }
-  return files.map(function (filename) {
-    let fileContents = {
+const getContents = function (utility, { option, count, files }, fs) {
+  let fileData = files.map(function (filename) {
+    let fileDetails = {
       name: filename,
       isExists: fs.existsSync(filename),
-      textToReturn: fileNotFoundMsg.bind(null, command, filename)()
     };
-    if (fileContents.isExists == true) {
-      let fileText = fs.readFileSync(filename);
-      fileContents.textToReturn = requiredText[command][option].bind(null, count, fileText)();
+    if (fileDetails.isExists == true) {
+      let fileContent = fs.readFileSync(filename);
+      fileDetails.requiredFileContent = requiredFunc[utility][option].bind(null, count, fileContent)();
     };
-    return fileContents;
+    return fileDetails;
   });
+  return { utility : utility, fileData : fileData}
 };
 
 const head = getContents.bind(null, "head");

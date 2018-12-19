@@ -50,8 +50,6 @@ const validateHeadInput = validateInput.bind(null, "head");
 const validateTailInput = validateInput.bind(null, "tail");
 
 module.exports = {
-    validateInput,
-    fileNotFoundMsg,
     isInvalidCount,
     isInvalidOption,
     validateHeadInput,

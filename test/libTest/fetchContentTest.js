@@ -81,115 +81,103 @@ describe("tailBytes", function () {
 });
 
 describe("head", function () {
-  describe("should return list of object contains file details as per provided parameters", function () {
-    it("should return isExists as true if provided file is present", function () {
+  describe("should return object with utility as head and fileContents as array containing object with name and", function () {
+    it("isExists as true and required content if provided file is present", function () {
       let parameters = { option: 'line', count: 3, files: ["numbers1To5.txt"] }
       let actualOutput = head(parameters, fs);
-      let expectedOutput = [{
-        name: "numbers1To5.txt",
-        isExists: true,
-        textToReturn: "1\n2\n3"
-      }];
+      let expectedOutput = {
+        utility: "head", fileData: [{
+          name: "numbers1To5.txt",
+          isExists: true,
+          requiredFileContent: "1\n2\n3"
+        }]
+      };
       assert.deepEqual(actualOutput, expectedOutput);
     });
 
-    it("should return isExists as false and fileText as undefined if file not exists", function () {
+    it("only isExists as false if file not exists", function () {
       let parameters = { option: 'line', count: 3, files: ["numbers.txt"] }
       let actualOutput = head(parameters, fs);
-      let expectedOutput = [{
-        name: "numbers.txt",
-        isExists: false,
-        textToReturn: "head: numbers.txt: No such file or directory",
-      }];
+      let expectedOutput = {
+        utility: "head", fileData: [{
+          name: "numbers.txt",
+          isExists: false,
+        }]
+      };
       assert.deepEqual(actualOutput, expectedOutput);
     });
 
-    it("should return file details for multiple files", function () {
-      let parameters = { option: 'byte', count: 3, files: ["numbers1To5.txt", "vowels.txt"] }
+    it("other file details for multiple files", function () {
+      let parameters = { option: 'byte', count: 3, files: ["numbers1To5.txt", "vowels.txt", "file.js"] }
       let actualOutput = head(parameters, fs);
-      let expectedOutput = [{
-        name: "numbers1To5.txt",
-        isExists: true,
-        textToReturn: "1\n2"
-      },
-      {
-        name: "vowels.txt",
-        isExists: true,
-        textToReturn: "a\ne"
-      }];
+      let expectedOutput = {
+        utility: "head", fileData: [{
+          name: "numbers1To5.txt",
+          isExists: true,
+          requiredFileContent: "1\n2"
+        },
+        {
+          name: "vowels.txt",
+          isExists: true,
+          requiredFileContent: "a\ne"
+        },
+        {
+          name: "file.js",
+          isExists: false
+        }]
+      };
       assert.deepEqual(actualOutput, expectedOutput);
     });
-
-    it("should return error message when illegal option is given", function () {
-      let parameters = { option: "r", count: 3, files: ["numbers1To5.txt", "vowels.txt"] }
-      let actualOutput = head(parameters, fs);
-      let expectedOutput = "head: illegal option -- r\nusage: head [-n lines | -c bytes] [file ...]";
-      assert.deepEqual(actualOutput, expectedOutput);
-    });
-
-    it("should return error message for illegal count", function () {
-      let parameters = { option: 'line', count: "-7e", files: ["numbers1To5.txt", "vowels.txt"] }
-      let actualOutput = head(parameters, fs);
-      let expectedOutput = "head: illegal line count -- -7e";
-      assert.deepEqual(actualOutput, expectedOutput);
-    });
-
   });
 });
 
-describe("tail", function () {
-  describe("should return list of object contains file details as per provided parameters", function () {
-    it("should return isExists as true if provided file is present", function () {
-      let parameters = { option: 'line', count: 3, files: ["numbers1To5.txt"] }
-      let actualOutput = tail(parameters, fs);
-      let expectedOutput = [{
-        name: "numbers1To5.txt",
-        isExists: true,
-        textToReturn: "3\n4\n5"
-      }];
-      assert.deepEqual(actualOutput, expectedOutput);
-    });
+  describe("tail", function () {
+    describe("should return object with utility as head and fileContents as array containing object with name and", function () {
+      it("isExists as true and required content if provided file is present", function () {
+        let parameters = { option: 'line', count: 3, files: ["numbers1To5.txt"] }
+        let actualOutput = tail(parameters, fs);
+        let expectedOutput = {
+          utility: "tail", fileData: [{
+            name: "numbers1To5.txt",
+            isExists: true,
+            requiredFileContent: "3\n4\n5"
+          }]
+        };
+        assert.deepEqual(actualOutput, expectedOutput);
+      });
 
-    it("should return isExists as false and fileText as undefined if file not exists", function () {
-      let parameters = { option: 'line', count: 3, files: ["numbers.txt"] }
-      let actualOutput = tail(parameters, fs);
-      let expectedOutput = [{
-        name: "numbers.txt",
-        isExists: false,
-        textToReturn: "tail: numbers.txt: No such file or directory",
-      }];
-      assert.deepEqual(actualOutput, expectedOutput);
-    });
+      it("only isExists as false if file not exists", function () {
+        let parameters = { option: 'line', count: 3, files: ["numbers.txt"] }
+        let actualOutput = tail(parameters, fs);
+        let expectedOutput = {
+          utility: "tail", fileData: [{
+            name: "numbers.txt",
+            isExists: false,
+          }]
+        };
+        assert.deepEqual(actualOutput, expectedOutput);
+      });
 
-    it("should return file details for multiple files", function () {
-      let parameters = { option: 'byte', count: 3, files: ["numbers1To5.txt", "vowels.txt"] }
-      let actualOutput = tail(parameters, fs);
-      let expectedOutput = [{
-        name: "numbers1To5.txt",
-        isExists: true,
-        textToReturn: "4\n5"
-      },
-      {
-        name: "vowels.txt",
-        isExists: true,
-        textToReturn: "o\nu"
-      }];
-      assert.deepEqual(actualOutput, expectedOutput);
+      it("other file details for multiple files", function () {
+        let parameters = { option: 'byte', count: 3, files: ["numbers1To5.txt", "vowels.txt", "test.txt"] }
+        let actualOutput = tail(parameters, fs);
+        let expectedOutput = {
+          utility: "tail", fileData: [{
+            name: "numbers1To5.txt",
+            isExists: true,
+            requiredFileContent: "4\n5"
+          },
+          {
+            name: "vowels.txt",
+            isExists: true,
+            requiredFileContent: "o\nu"
+          },
+          {
+            name: "test.txt",
+            isExists: false
+          }]
+        };
+        assert.deepEqual(actualOutput, expectedOutput);
+      });
     });
-
-    it("should return error message when illegal option is given", function () {
-      let parameters = { option: "g", count: 3, files: ["numbers1To5.txt", "vowels.txt"] }
-      let actualOutput = tail(parameters, fs);
-      let expectedOutput = "tail: illegal option -- g\nusage: tail [-F | -f | -r] [-q] [-b # | -c # | -n #] [file ...]";
-      assert.deepEqual(actualOutput, expectedOutput);
-    });
-
-    it("should return error message for illegal count", function () {
-      let parameters = { option: 'line', count: -7, files: ["numbers1To5.txt", "vowels.txt"] }
-      let actualOutput = tail(parameters, fs);
-      let expectedOutput = "tail: illegal offset -- -7";
-      assert.deepEqual(actualOutput, expectedOutput);
-    });
-
   });
-});
