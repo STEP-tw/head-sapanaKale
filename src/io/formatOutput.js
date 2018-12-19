@@ -6,15 +6,19 @@ const returnContent = function (content, filename) {
     return content;
 };
 
+const fileNotFoundMsg = function (utility, filename) {
+    return utility + ": " + filename + ": No such file or directory";
+};
+
 const isSingleFile = { false: addFilename, true: returnContent };
 
-const formatOutput = function (fileContents) {
-    let outputView = isSingleFile[fileContents.length == 1];
-    return fileContents.map(function (fileContent) {
-        if (fileContent.isExists) {
-            return outputView(fileContent.textToReturn, fileContent.name);
+const formatOutput = function ({ utility, fileData }) {
+    let outputView = isSingleFile[fileData.length == 1];
+    return fileData.map(function (fileDetails) {
+        if (fileDetails.isExists) {
+            return outputView(fileDetails.requiredFileContent, fileDetails.name);
         };
-        return fileContent.textToReturn;
+        return fileNotFoundMsg(utility, fileDetails.name);
     }).join("\n\n");
 };
 
