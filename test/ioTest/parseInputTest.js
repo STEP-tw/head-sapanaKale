@@ -7,7 +7,7 @@ const {
     isOnlyOption,
     isOptionAndCount,
     segregateInput,
-} = require("../../src/lib/parseInput.js");
+} = require("../../src/io/parseInput.js");
 
 describe("isOption", function () {
     it("should return true if provided string is in option format", function () {

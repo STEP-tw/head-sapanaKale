@@ -2,7 +2,7 @@ const assert = require("assert");
 
 const {
     formatOutput
-} = require("../../src/lib/formatOutput.js");
+} = require("../../src/io/formatOutput.js");
 
 describe("formatOutput", function () {
     it("should return file content without heading for single file", function () {
