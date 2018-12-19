@@ -1,5 +1,5 @@
-const illegalOptionMsg = function (option, functionName) {
-    return functionName + ": illegal option -- " + option;
+const illegalOptionMsg = function (option, utility) {
+    return utility + ": illegal option -- " + option;
 };
 
 const illegalCountMsg = function (count, option) {
@@ -10,16 +10,16 @@ const illegalOffsetMsg = function (count) {
     return "tail: illegal offset -- " + count;
 };
 
-const fileNotFoundMsg = function (functionName, fileName) {
-    return functionName + ": " + fileName + ": No such file or directory";
+const fileNotFoundMsg = function (utility, fileName) {
+    return utility + ": " + fileName + ": No such file or directory";
 };
 
 const isInvalidOption = function (option) {
     return option != "line" && option != "byte";
 };
 
-const isInvalidCount = function (count, functionName) {
-    if (functionName == 'tail') {
+const isInvalidCount = function (count, utility) {
+    if (utility == 'tail') {
         return isNaN(count) || count < 0;
     }
     return isNaN(count) || count < 1;
@@ -33,16 +33,27 @@ const usageMsg = { head : usageMsgForHead,
                    tail : usageMsgForTail };
 
 const invalidCountMsg = { head : illegalCountMsg,
-                          tail : illegalOffsetMsg };                           
+                          tail : illegalOffsetMsg };                          
 
-const validateInput = function ({ option, count }, functionName) {
+const validateInput = function (utility, { option, count }) {
     if (isInvalidOption(option)) {
-        return illegalOptionMsg(option, functionName) + "\n" + usageMsg[functionName];
+        return illegalOptionMsg(option, utility) + "\n" + usageMsg[utility];
     }
-    if (isInvalidCount(count, functionName)) {
-        return invalidCountMsg[functionName](count, option);
+    if (isInvalidCount(count, utility)) {
+        return invalidCountMsg[utility](count, option);
     }
     return "";
 };
 
-module.exports = { validateInput, fileNotFoundMsg, isInvalidCount, isInvalidOption }
+const validateHeadInput = validateInput.bind(null, "head");
+
+const validateTailInput = validateInput.bind(null, "tail");
+
+module.exports = {
+    validateInput,
+    fileNotFoundMsg,
+    isInvalidCount,
+    isInvalidOption,
+    validateHeadInput,
+    validateTailInput
+}

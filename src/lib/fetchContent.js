@@ -27,7 +27,7 @@ const requiredText = { head : { line : headLines, byte : headBytes },
                      };
 
 const getContents = function (command, { option, count, files }, fs) {
-  let error = validateInput({ option, count }, command);
+  let error = validateInput(command, { option, count });
   if (error) {
     return error;
   }
