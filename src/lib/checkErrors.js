@@ -10,10 +10,6 @@ const illegalOffsetMsg = function (count) {
     return "tail: illegal offset -- " + count;
 };
 
-const fileNotFoundMsg = function (utility, fileName) {
-    return utility + ": " + fileName + ": No such file or directory";
-};
-
 const isInvalidOption = function (option) {
     return option != "line" && option != "byte";
 };
