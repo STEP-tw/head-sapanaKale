@@ -18,7 +18,7 @@ const isOnlyOption = function (input) {
   return input.length == 2 && isOption(input);
 };
 
-const segregateInput = function (input) {
+const parse = function (input) {
   if (isOnlyCount(input[0])) {
     return { option: "n", count: input[0].slice(1), files: input.slice(1) };
   };
@@ -36,7 +36,7 @@ const segregateInput = function (input) {
 };
 
 module.exports = {
-  segregateInput,
+  parse,
   isOnlyCount,
   isOnlyOption,
   isOptionAndCount,
