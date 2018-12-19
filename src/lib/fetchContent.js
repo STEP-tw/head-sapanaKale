@@ -22,9 +22,9 @@ const tailLines = fetchContent.bind(null, "\n", last);
 
 const tailBytes = fetchContent.bind(null, "", last);
 
-const requiredText = { head : { n : headLines, c : headBytes },
-                          tail : { n : tailLines, c : tailBytes }
-                        };
+const requiredText = { head : { line : headLines, byte : headBytes },
+                       tail : { line : tailLines, byte : tailBytes }
+                     };
 
 const getContents = function (command, { option, count, files }, fs) {
   let error = validateInput({ option, count }, command);

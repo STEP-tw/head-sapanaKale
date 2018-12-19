@@ -15,7 +15,7 @@ const fileNotFoundMsg = function (functionName, fileName) {
 };
 
 const isInvalidOption = function (option) {
-    return option != "n" && option != "c";
+    return option != "line" && option != "byte";
 };
 
 const isInvalidCount = function (count, functionName) {
@@ -33,16 +33,14 @@ const usageMsg = { head : usageMsgForHead,
                    tail : usageMsgForTail };
 
 const invalidCountMsg = { head : illegalCountMsg,
-                           tail : illegalOffsetMsg };                           
-
-const type = { n: "line", c: "byte" };
+                          tail : illegalOffsetMsg };                           
 
 const validateInput = function ({ option, count }, functionName) {
     if (isInvalidOption(option)) {
         return illegalOptionMsg(option, functionName) + "\n" + usageMsg[functionName];
     }
     if (isInvalidCount(count, functionName)) {
-        return invalidCountMsg[functionName](count, type[option]);
+        return invalidCountMsg[functionName](count, option);
     }
     return "";
 };
