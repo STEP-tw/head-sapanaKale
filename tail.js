@@ -15,15 +15,20 @@
 */
 
 const { tail } = require('./src/lib/fetchContent.js');
-const { formatOutput } = require('./src/lib/formatOutput.js');
-const { segregateInput } = require('./src/lib/parseInput.js');
+const { validateTailInput } = require('./src/lib/checkErrors.js');
+const { formatOutput } = require('./src/io/formatOutput.js');
+const { parse } = require('./src/io/parseInput.js');
 
 const fs = require('fs');
 
 const main = function () {
-  let parameters = segregateInput(process.argv.slice(2));
+  let parameters = parse(process.argv.slice(2));
+  let error = validateTailInput(parameters);
+  if (error) {
+    return error;
+  };
   let output = tail(parameters, fs);
-  console.log(formatOutput(output));
+  return formatOutput(output);
 };
 
-main();
+console.log(main());

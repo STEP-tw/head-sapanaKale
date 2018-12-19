@@ -15,16 +15,20 @@
 */
 
 const { head } = require('./src/lib/fetchContent.js');
-const { formatOutput } = require('./src/lib/formatOutput.js');
-const { segregateInput } = require('./src/lib/parseInput.js');
+const { validateHeadInput } = require('./src/lib/checkErrors.js');
+const { formatOutput } = require('./src/io/formatOutput.js');
+const { parse } = require('./src/io/parseInput.js');
 
 const fs = require('fs');
 
 const main = function () {
-  let parameters = segregateInput(process.argv.slice(2));
+  let parameters = parse(process.argv.slice(2));
+  let error = validateHeadInput(parameters);
+  if (error) {
+    return error;
+  };
   let output = head(parameters, fs);
-  console.log(formatOutput(output));
+  return formatOutput(output);
 };
 
-main();
-
+console.log(main());
