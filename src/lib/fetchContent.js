@@ -5,7 +5,7 @@ const take = function (count, list) {
 };
 
 const last = function (count, list) {
-  return list.slice(-count);
+  return list.slice(Math.max(list.length-count,0));
 };
 
 const fetchContent = function (delimiter, fetcher, count, content) {
