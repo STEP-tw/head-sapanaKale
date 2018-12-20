@@ -1,21 +1,21 @@
-const isNumber = function (string) {
-  return !isNaN(string);
+const isNumber = function (userArg) {
+  return !isNaN(userArg);
 };
 
-const isOption = function (string) {
-  return string[0] == "-" && isNaN(string[1]);
+const isStartWithOption = function (userArg) {
+  return userArg[0] == "-" && isNaN(userArg[1]);
 };
 
-const isOnlyCount = function (input) {
-  return input.length > 1 && isNumber(input.slice(0, 2));
+const isOnlyCount = function (userArg) {
+  return userArg.length > 1 && isNumber(userArg.slice(0, 2));
 };
 
-const isOptionAndCount = function (input) {
-  return input.length > 2 && isOption(input);
+const isOptionAndCount = function (userArg) {
+  return userArg.length > 2 && isStartWithOption(userArg);
 };
 
-const isOnlyOption = function (input) {
-  return input.length == 2 && isOption(input);
+const isOnlyOption = function (userArg) {
+  return userArg.length == 2 && isStartWithOption(userArg);
 };
 
 const isValidOption = function (option) {
@@ -24,25 +24,34 @@ const isValidOption = function (option) {
 
 const options = { n : "line", c : "byte" };
 
-const segregateInput = function (input) {
-  if (isOnlyCount(input[0])) {
-    return { option: "n", count: input[0].slice(1), files: input.slice(1) };
-  };
-  if (isOptionAndCount(input[0])) {
-    return {
-      option: input[0][1],
-      count: input[0].slice(2),
-      files: input.slice(1)
-    };
-  };
-  if (isOnlyOption(input[0])) {
-    return { option: input[0][1], count: input[1], files: input.slice(2) };
-  };
-  return { option: "n", count: 10, files: input.slice(0) };
+const createParameterObject = function (option, count, files) {
+  return { option, count, files };
 };
 
-const parse = function (input) {
-  let parameters = segregateInput(input);
+const segregateInput = function (userArgs) {
+  let firstArg = userArgs[0];
+  let option = "n";
+  let count = 10;
+  let files = userArgs.slice(0);
+  if (isOnlyCount(firstArg)) {
+    count = firstArg.slice(1);
+    files = userArgs.slice(1);
+  };
+  if (isOptionAndCount(firstArg)) {
+    option = firstArg[1];
+    count = firstArg.slice(2);
+    files = userArgs.slice(1);
+  };
+  if (isOnlyOption(firstArg)) {
+    option = firstArg[1];
+    count = userArgs[1];
+    files = userArgs.slice(2);
+  };
+  return createParameterObject(option, count, files)
+};
+
+const parse = function (userArgs) {
+  let parameters = segregateInput(userArgs);
   if (isValidOption(parameters.option)) {
     parameters.option = options[parameters.option];
   };
@@ -58,6 +67,6 @@ module.exports = {
   isOnlyCount,
   isOnlyOption,
   isOptionAndCount,
-  isOption,
+  isStartWithOption,
   isNumber
 };

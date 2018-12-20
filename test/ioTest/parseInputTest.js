@@ -1,7 +1,7 @@
 const assert = require("assert");
 
 const {
-    isOption,
+    isStartWithOption,
     isNumber,
     isOnlyCount,
     isOnlyOption,
@@ -10,14 +10,14 @@ const {
     parse,
 } = require("../../src/io/parseInput.js");
 
-describe("isOption", function () {
-    it("should return true if provided string is in option format", function () {
-        assert.deepEqual(isOption("-n"), true);
-        assert.deepEqual(isOption("-c"), true);
-        assert.deepEqual(isOption("-e"), true);
+describe("isStartWithOption", function () {
+    it("should return true if provided string is in format -option", function () {
+        assert.deepEqual(isStartWithOption("-n1"), true);
+        assert.deepEqual(isStartWithOption("-c"), true);
+        assert.deepEqual(isStartWithOption("-eq"), true);
     });
-    it("should return false if provided string is not in option format", function () {
-        assert.deepEqual(isOption("fh"), false);
+    it("should return false if provided string is not in format -option", function () {
+        assert.deepEqual(isStartWithOption("fh"), false);
     });
 });
 
@@ -41,23 +41,23 @@ describe("isOnlyCount", function () {
     });
 });
 
-describe("isOptionAnd", function () {
-    it('should return true if provided input is in format "-n12"', function () {
+describe("isOptionAndCount", function () {
+    it('should return true if provided input is in format "-optionAndCout"', function () {
         assert.deepEqual(isOptionAndCount("-n11"), true);
         assert.deepEqual(isOptionAndCount("-c4"), true);
     });
-    it('should return false if provided input is not in format "-n12"', function () {
+    it('should return false if provided input is not in format "-optionAndCount"', function () {
         assert.deepEqual(isOptionAndCount("-12"), false);
         assert.deepEqual(isOptionAndCount("-n"), false);
     });
 });
 
 describe("isOnlyOption", function () {
-    it('should return true if provided input is in format "-n"', function () {
+    it('should return true if provided input is in format "-option"', function () {
         assert.deepEqual(isOnlyOption("-n"), true);
         assert.deepEqual(isOnlyOption("-c"), true);
     });
-    it('should return false if provided input is not in format "-n"', function () {
+    it('should return false if provided input is not in format "-option"', function () {
         assert.deepEqual(isOnlyOption("-n2"), false);
         assert.deepEqual(isOnlyOption("-12"), false);
     });
