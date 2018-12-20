@@ -81,13 +81,13 @@ describe("tailBytes", function () {
 });
 
 describe("head", function () {
-  describe("should return object with utility as head and fileContents as array containing object with name and", function () {
+  describe("should return object with utility as head and fileContents as array containing object with fileName and", function () {
     it("isExists as true and required content if provided file is present", function () {
       let parameters = { option: 'line', count: 3, files: ["numbers1To5.txt"] }
       let actualOutput = head(parameters, fs);
       let expectedOutput = {
         utility: "head", fileData: [{
-          name: "numbers1To5.txt",
+          fileName: "numbers1To5.txt",
           isExists: true,
           requiredFileContent: "1\n2\n3"
         }]
@@ -100,7 +100,7 @@ describe("head", function () {
       let actualOutput = head(parameters, fs);
       let expectedOutput = {
         utility: "head", fileData: [{
-          name: "numbers.txt",
+          fileName: "numbers.txt",
           isExists: false,
         }]
       };
@@ -112,17 +112,17 @@ describe("head", function () {
       let actualOutput = head(parameters, fs);
       let expectedOutput = {
         utility: "head", fileData: [{
-          name: "numbers1To5.txt",
+          fileName: "numbers1To5.txt",
           isExists: true,
           requiredFileContent: "1\n2"
         },
         {
-          name: "vowels.txt",
+          fileName: "vowels.txt",
           isExists: true,
           requiredFileContent: "a\ne"
         },
         {
-          name: "file.js",
+          fileName: "file.js",
           isExists: false
         }]
       };
@@ -132,13 +132,13 @@ describe("head", function () {
 });
 
   describe("tail", function () {
-    describe("should return object with utility as head and fileContents as array containing object with name and", function () {
+    describe("should return object with utility as head and fileContents as array containing object with fileName and", function () {
       it("isExists as true and required content if provided file is present", function () {
         let parameters = { option: 'line', count: 3, files: ["numbers1To5.txt"] }
         let actualOutput = tail(parameters, fs);
         let expectedOutput = {
           utility: "tail", fileData: [{
-            name: "numbers1To5.txt",
+            fileName: "numbers1To5.txt",
             isExists: true,
             requiredFileContent: "3\n4\n5"
           }]
@@ -151,7 +151,7 @@ describe("head", function () {
         let actualOutput = tail(parameters, fs);
         let expectedOutput = {
           utility: "tail", fileData: [{
-            name: "numbers.txt",
+            fileName: "numbers.txt",
             isExists: false,
           }]
         };
@@ -163,17 +163,17 @@ describe("head", function () {
         let actualOutput = tail(parameters, fs);
         let expectedOutput = {
           utility: "tail", fileData: [{
-            name: "numbers1To5.txt",
+            fileName: "numbers1To5.txt",
             isExists: true,
             requiredFileContent: "4\n5"
           },
           {
-            name: "vowels.txt",
+            fileName: "vowels.txt",
             isExists: true,
             requiredFileContent: "o\nu"
           },
           {
-            name: "test.txt",
+            fileName: "test.txt",
             isExists: false
           }]
         };

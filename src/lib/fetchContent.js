@@ -25,13 +25,13 @@ const requiredFunc = { head : { line : headLines, byte : headBytes },
                      };
 
 const getContents = function (utility, { option, count, files }, fs) {
-  let fileData = files.map(function (filename) {
+  let fileData = files.map(function (fileName) {
     let fileDetails = {
-      name: filename,
-      isExists: fs.existsSync(filename),
+      fileName: fileName,
+      isExists: fs.existsSync(fileName),
     };
     if (fileDetails.isExists == true) {
-      let fileContent = fs.readFileSync(filename);
+      let fileContent = fs.readFileSync(fileName);
       fileDetails.requiredFileContent = requiredFunc[utility][option].bind(null, count, fileContent)();
     };
     return fileDetails;

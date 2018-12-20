@@ -8,7 +8,7 @@ describe("formatOutput", function () {
     it("should return file content without heading for single file", function () {
         let actualOutput = formatOutput({
             utility: "head", fileData: [{
-                name: "numbers1To5.txt",
+                fileName: "numbers1To5.txt",
                 isExists: true,
                 requiredFileContent: "1\n2\n3"
             }]
@@ -20,12 +20,12 @@ describe("formatOutput", function () {
     it("should return file contents with heading for multiple files", function () {
         let actualOutput = formatOutput({
             utility: "tail", fileData: [{
-                name: "numbers1To5.txt",
+                fileName: "numbers1To5.txt",
                 isExists: true,
                 requiredFileContent: "1\n2"
             },
             {
-                name: "vowels.txt",
+                fileName: "vowels.txt",
                 isExists: true,
                 requiredFileContent: "a\ne"
             }]
@@ -37,7 +37,7 @@ describe("formatOutput", function () {
     it("should return error message if provided file not exists", function () {
         let actualOutput = formatOutput({
             utility: "head", fileData: [{
-                name: "numbers.txt",
+                fileName: "numbers.txt",
                 isExists: false,
             }]
         });
@@ -48,12 +48,12 @@ describe("formatOutput", function () {
     it("should return file contents with heading for multiple files and error msg when file not exists", function () {
         let actualOutput = formatOutput({
             utility: "tail", fileData: [{
-                name: "numbers1To5.txt",
+                fileName: "numbers1To5.txt",
                 isExists: true,
                 requiredFileContent: "1\n2"
             },
             {
-                name: "vowel.txt",
+                fileName: "vowel.txt",
                 isExists: false,
             }]
         });
