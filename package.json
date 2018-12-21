@@ -1,5 +1,5 @@
 {
-  "name": "head",
+  "name": "headAndTail",
   "version": "0.0.1",
   "description": "head",
   "main": "fetchContent.js",
@@ -8,7 +8,8 @@
   },
   "scripts": {
     "test": "mocha --recursive",
-    "start": "node head.js head.js"
+    "startHead": "node head.js head.js",
+    "startTail": "node tail.js tail.js"
   },
   "repository": {
     "type": "git",
