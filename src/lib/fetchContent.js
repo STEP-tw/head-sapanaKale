@@ -36,7 +36,7 @@ const getContents = function (utility, { option, count, files }, fs) {
     };
     return fileDetails;
   });
-  return { utility : utility, fileData : fileData}
+  return { utility, fileData};
 };
 
 const head = getContents.bind(null, "head");
