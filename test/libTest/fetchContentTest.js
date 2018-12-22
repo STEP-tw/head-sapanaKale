@@ -11,10 +11,6 @@ const {
   tail,
 } = require("../../src/lib/fetchContent.js");
 
-const {
-  fileNotFoundMsg
-} = require("../../src/lib/checkErrors.js");
-
 const fileContents = {
   "numbers1To5.txt": "1\n2\n3\n4\n5",
   "vowels.txt": "a\ne\ni\no\nu",
@@ -81,7 +77,7 @@ describe("tailBytes", function () {
 });
 
 describe("head", function () {
-  describe("should return object with utility as head and fileContents as array containing object with fileName and", function () {
+  describe("should return object with utility -head and filesData as array of objects", function () {
     it("isExists as true and required content if provided file is present", function () {
       let parameters = { option: 'line', count: 3, files: ["numbers1To5.txt"] }
       let actualOutput = head(parameters, fs);

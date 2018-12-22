@@ -13,7 +13,9 @@ describe("formatOutput", function () {
                 requiredFileContent: "1\n2\n3"
             }]
         });
-        let expectedOutput = "1\n2\n3";
+        let expectedOutput = [1,
+                              2,
+                              3].join("\n");
         assert.deepEqual(actualOutput, expectedOutput);
     });
 
@@ -30,7 +32,12 @@ describe("formatOutput", function () {
                 requiredFileContent: "a\ne"
             }]
         });
-        let expectedOutput = "==> numbers1To5.txt <==\n1\n2\n\n==> vowels.txt <==\na\ne";
+        let expectedOutput = ["==> numbers1To5.txt <==",
+                              "1",
+                              "2\n",
+                              "==> vowels.txt <==",
+                              "a",
+                              "e"].join("\n");
         assert.deepEqual(actualOutput, expectedOutput);
     });
 
@@ -57,7 +64,10 @@ describe("formatOutput", function () {
                 isExists: false,
             }]
         });
-        let expectedOutput = "==> numbers1To5.txt <==\n1\n2\n\ntail: vowel.txt: No such file or directory";
+        let expectedOutput = ["==> numbers1To5.txt <==",
+                              "1",
+                              "2\n",
+                              "tail: vowel.txt: No such file or directory"].join("\n");
         assert.deepEqual(actualOutput, expectedOutput);
     });
 
