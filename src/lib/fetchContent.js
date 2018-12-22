@@ -20,23 +20,24 @@ const tailLines = fetchContent.bind(null, "\n", last);
 
 const tailBytes = fetchContent.bind(null, "", last);
 
-const requiredFunc = { head : { line : headLines, byte : headBytes },
+const getContent = { head : { line : headLines, byte : headBytes },
                        tail : { line : tailLines, byte : tailBytes }
                      };
 
 const getContents = function (utility, { option, count, files }, fs) {
-  let fileData = files.map(function (fileName) {
+  let filesData = files.map(function (fileName) {
     let fileDetails = {
       fileName: fileName,
       isExists: fs.existsSync(fileName),
     };
     if (fileDetails.isExists == true) {
       let fileContent = fs.readFileSync(fileName);
-      fileDetails.requiredFileContent = requiredFunc[utility][option].bind(null, count, fileContent)();
+      let content = getContent[utility][option].bind(null, count, fileContent)();
+      fileDetails.requiredFileContent = content;
     };
     return fileDetails;
   });
-  return { utility, fileData};
+  return { utility, filesData};
 };
 
 const head = getContents.bind(null, "head");

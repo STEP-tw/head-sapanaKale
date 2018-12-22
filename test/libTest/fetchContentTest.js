@@ -82,7 +82,7 @@ describe("head", function () {
       let parameters = { option: 'line', count: 3, files: ["numbers1To5.txt"] }
       let actualOutput = head(parameters, fs);
       let expectedOutput = {
-        utility: "head", fileData: [{
+        utility: "head", filesData: [{
           fileName: "numbers1To5.txt",
           isExists: true,
           requiredFileContent: "1\n2\n3"
@@ -95,7 +95,7 @@ describe("head", function () {
       let parameters = { option: 'line', count: 3, files: ["numbers.txt"] }
       let actualOutput = head(parameters, fs);
       let expectedOutput = {
-        utility: "head", fileData: [{
+        utility: "head", filesData: [{
           fileName: "numbers.txt",
           isExists: false,
         }]
@@ -107,7 +107,7 @@ describe("head", function () {
       let parameters = { option: 'byte', count: 3, files: ["numbers1To5.txt", "vowels.txt", "file.js"] }
       let actualOutput = head(parameters, fs);
       let expectedOutput = {
-        utility: "head", fileData: [{
+        utility: "head", filesData: [{
           fileName: "numbers1To5.txt",
           isExists: true,
           requiredFileContent: "1\n2"
@@ -133,7 +133,7 @@ describe("head", function () {
         let parameters = { option: 'line', count: 3, files: ["numbers1To5.txt"] }
         let actualOutput = tail(parameters, fs);
         let expectedOutput = {
-          utility: "tail", fileData: [{
+          utility: "tail", filesData: [{
             fileName: "numbers1To5.txt",
             isExists: true,
             requiredFileContent: "3\n4\n5"
@@ -146,7 +146,7 @@ describe("head", function () {
         let parameters = { option: 'line', count: 3, files: ["numbers.txt"] }
         let actualOutput = tail(parameters, fs);
         let expectedOutput = {
-          utility: "tail", fileData: [{
+          utility: "tail", filesData: [{
             fileName: "numbers.txt",
             isExists: false,
           }]
@@ -158,7 +158,7 @@ describe("head", function () {
         let parameters = { option: 'byte', count: 3, files: ["numbers1To5.txt", "vowels.txt", "test.txt"] }
         let actualOutput = tail(parameters, fs);
         let expectedOutput = {
-          utility: "tail", fileData: [{
+          utility: "tail", filesData: [{
             fileName: "numbers1To5.txt",
             isExists: true,
             requiredFileContent: "4\n5"
