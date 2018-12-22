@@ -6,15 +6,15 @@ const fileNotFoundMsg = function (utility, filename) {
     return utility + ": " + filename + ": No such file or directory";
 };
 
-const formatOutput = function ({ utility, fileData }) {
-    return fileData.map(function ({ fileName, isExists, requiredFileContent }) {
-        if (isExists) {
-            if (fileData.length == 1) {
-                return requiredFileContent;
-            };
-            return addFileName(requiredFileContent, fileName);
+const formatOutput = function ({ utility, filesData }) {
+    return filesData.map(function ({ fileName, isExists, requiredFileContent }) {
+        if (!isExists) {
+            return fileNotFoundMsg(utility, fileName);
+        }
+        if (filesData.length == 1) {
+            return requiredFileContent;
         };
-        return fileNotFoundMsg(utility, fileName);
+        return addFileName(requiredFileContent, fileName);
     }).join("\n\n");
 };
 
