@@ -30,7 +30,7 @@ const getContents = function (utility, { option, count, files }, fs) {
       fileName: fileName,
       isExists: fs.existsSync(fileName),
     };
-    if (fileDetails.isExists == true) {
+    if (fileDetails.isExists) {
       let fileContent = fs.readFileSync(fileName);
       let content = getContent[utility][option].bind(null, count, fileContent)();
       fileDetails.requiredFileContent = content;
